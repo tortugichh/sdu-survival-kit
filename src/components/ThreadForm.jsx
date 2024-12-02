@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthContext';
 import styles from '../styles/ThreadForm.module.css';
 import Cookies from 'js-cookie';
 
-const ThreadForm = () => {
+const ThreadForm = ({ onThreadAdded }) => {
   const { user, authTokens } = useContext(AuthContext);
 
   const [alertShow, setAlertShow] = useState(false);
@@ -41,8 +41,6 @@ const ThreadForm = () => {
       ...thread,
     };
 
-    let accessToken = authTokens.access; // Получаем текущий токен доступа из контекста пользователя
-
     try {
       const csrfToken = Cookies.get('csrftoken');
 
@@ -56,7 +54,7 @@ const ThreadForm = () => {
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken,
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${authTokens.access}`,
         },
         body: JSON.stringify(updatedThread),
       });
@@ -66,6 +64,8 @@ const ThreadForm = () => {
         console.log('Thread created:', data);
         setThread({ subject: '', content: '', topic: '' }); // Очистить поля формы
         handleClose(); // Закрываем форму после успешного создания потока
+        if (onThreadAdded) onThreadAdded(); // Вызываем onThreadAdded для обновления списка потоков
+        window.location.reload(); // Перезагружаем страницу, чтобы отобразить добавленный поток
       } else {
         const errorText = await response.text();
         console.error('Failed to create thread:', errorText);
