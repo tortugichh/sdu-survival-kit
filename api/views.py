@@ -65,7 +65,7 @@ class PostListView(generics.ListCreateAPIView):
 class CreateThreadView(generics.CreateAPIView):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated] # for testing purposes
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)

@@ -47,6 +47,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 # Thread Serializer
 class ThreadSerializer(serializers.ModelSerializer):
+    creator = serializers.ReadOnlyField(source='creator.username')
     creator_id = serializers.IntegerField(source='creator.id', read_only=True)
     upvotes = serializers.IntegerField(source='upvotes.count', read_only=True)
     downvotes = serializers.IntegerField(source='downvotes.count', read_only=True)
