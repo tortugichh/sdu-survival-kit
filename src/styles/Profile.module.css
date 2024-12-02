@@ -1,0 +1,72 @@
+.container {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profileWrapper {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .profileTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .avatarSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .profileName {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .status {
+    background: #f0f0f0;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: inline-block;
+  }
+  
+  .divider {
+    height: 2px;
+    background: #ddd;
+    margin: 20px 0;
+  }
+  
+  .bioSection {
+    text-align: center;
+  }
+  
+  .bio {
+    white-space: pre-line;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  

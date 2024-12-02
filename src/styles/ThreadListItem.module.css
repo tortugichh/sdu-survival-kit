@@ -1,0 +1,47 @@
+.threadListItem {
+    width: 100%;
+    background-color: #fff;
+    margin-bottom: 10px;
+  }
+  
+  .listItem {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: box-shadow 0.2s;
+  }
+  
+  .listItem:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .link {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .subject {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .secondaryText {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0 0;
+  }
+  
+  .creator {
+    font-weight: bold;
+  }
+  
+  .updated {
+    font-style: italic;
+  }
+  
+  .divider {
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+  }
+  

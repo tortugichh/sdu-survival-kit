@@ -1,0 +1,192 @@
+
+.appBar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.toolbar{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  
+  
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.logo img {
+  height: 30px;
+  margin-right: 10px;
+}
+
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+}
+
+.navLink:hover {
+  color: #f0f0f0;
+}
+
+
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #1E64FA;
+  padding: 9px 30px;
+  border-radius: 10px;
+  color: white;
+  font-family: 'Nunito sans', sans-serif;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.dropdownContent a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownContent a:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown:hover .dropdownContent {
+  display: block;
+}
+
+
+.authLinks {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.authLink {
+  color: white;
+  background-color: #1E64FA;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.authLink:hover {
+  background-color: white;
+  color: #6a5acd;
+}
+
+.menuButton {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+
+.userSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  
+}
+
+.avatarButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Мобильное меню */
+@media (max-width: 768px) {
+  .menuButton {
+    display: block;
+  }
+
+  .navMenu {
+    display: none;
+    flex-direction: column;
+    background: #6a5acd;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    padding: 10px 0;
+    z-index: 1;
+  }
+
+  .navMenu.open {
+    display: flex;
+  }
+
+  .navLink {
+    margin: 10px 0;
+    text-align: center;
+  }
+}

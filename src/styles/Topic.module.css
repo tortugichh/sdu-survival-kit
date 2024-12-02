@@ -1,0 +1,53 @@
+.container {
+    margin-top: 100px;
+    padding: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .content {
+    margin-top: 20px;
+  }
+  
+  .threads {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .loadMoreButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #f8f9fa;
+  }
+  
+  .endMessage {
+    text-align: center;
+    color: gray;
+    margin-top: 20px;
+  }
+  
+  .loading {
+    text-align: center;
+    color: #555;
+    font-size: 18px;
+  }
+  

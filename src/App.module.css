@@ -1,0 +1,18 @@
+*{
+  font-family: "Nunito Sans", serif;
+}
+
+body {
+  background: radial-gradient(circle at center, #849AB0, #2D70A7);
+  height: 90vh;
+
+}
+
+
+.App {
+  background-color: transparent; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; 
+}

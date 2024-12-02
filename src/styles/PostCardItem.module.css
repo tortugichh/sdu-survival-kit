@@ -1,0 +1,36 @@
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    padding: 20px;
+    min-width: 300px;
+  }
+  
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .content {
+    white-space: pre-line;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+  }
+  
+  .meta {
+    font-size: 14px;
+    color: grey;
+  }
+  
+  .creator {
+    color: grey;
+    text-decoration: none;
+  }
+  
+  .creator:hover {
+    text-decoration: underline;
+  }
+  

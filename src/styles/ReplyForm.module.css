@@ -1,0 +1,127 @@
+.container {
+    position: relative;
+  }
+  
+  .fab {
+    position: fixed;
+    bottom: 110px;
+    right: 20px;
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .fab:hover {
+    background-color: #594ab3;
+  }
+  
+  .dialogOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .dialog {
+    background: white;
+    border-radius: 8px;
+    width: 500px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .dialogHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .dialogClose {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .dialogContent {
+    margin-bottom: 20px;
+  }
+  
+  .textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .dialogActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .cancelButton {
+    background: #ddd;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .submitButton {
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .submitButton:hover {
+    background-color: #594ab3;
+  }
+  
+  .alert {
+    background: #ffe5e5;
+    color: #d32f2f;
+    padding: 10px;
+    border: 1px solid #d32f2f;
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .alertClose {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .link {
+    color: #6a5acd;
+    text-decoration: underline;
+  }
+  
