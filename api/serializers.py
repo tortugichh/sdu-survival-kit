@@ -44,7 +44,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         profile.save()
         return user
 
-
 # Thread Serializer
 class ThreadSerializer(serializers.ModelSerializer):
     creator = serializers.ReadOnlyField(source='creator.username')
