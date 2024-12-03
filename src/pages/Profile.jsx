@@ -5,19 +5,27 @@ import ProfileEditForm from '../components/ProfileEditForm';
 import styles from '../styles/Profile.module.css';
 
 const Profile = () => {
-  let { user, authTokens } = useContext(AuthContext);  // Import authTokens from the AuthContext
+  const { user, authTokens } = useContext(AuthContext);  // Import authTokens from the AuthContext
 
-  let params = useParams();
-  let profileID = params.id;
+  const params = useParams();
+  const profileID = params.id;
 
-  let isMyself = user !== null && user['user_id'] === parseInt(profileID);
+  const isMyself = user !== null && user['user_id'] === parseInt(profileID);
 
   const [profile, setProfile] = useState();
+
+  // Function to handle the profile update and update the local state
+  const handleProfileUpdate = (updatedProfile) => {
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      ...updatedProfile,
+    }));
+  };
 
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const response = await fetch(`/api/profile/${profileID}`, {
+        const response = await fetch(`/api/profile/${profileID}/`, {
           headers: {
             'Authorization': `Bearer ${authTokens?.access}`,  // Use the authTokens here
           },
@@ -45,7 +53,7 @@ const Profile = () => {
           <h1 className={styles.profileTitle}>{profile?.name}'s Profile</h1>
 
           <div className={styles.card}>
-            {isMyself && <ProfileEditForm profile={profile} />}
+            {isMyself && <ProfileEditForm profile={profile} onUpdateProfile={handleProfileUpdate} />}
 
             <div className={styles.avatarSection}>
               <img

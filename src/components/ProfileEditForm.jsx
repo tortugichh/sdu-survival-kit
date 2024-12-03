@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
+import Cookies from 'js-cookie';
 import styles from '../styles/ProfileEditForm.module.css';
 
-const ProfileEditForm = ({ profile }) => {
-  const { user } = useContext(AuthContext);
+const ProfileEditForm = ({ profile, onUpdateProfile }) => {
+  const { user, getAuthHeaders } = useContext(AuthContext); // getAuthHeaders to include Authorization
   const userID = user['user_id'];
 
   const [open, setOpen] = useState(false);
@@ -17,16 +18,40 @@ const ProfileEditForm = ({ profile }) => {
 
   const handleProfile = async (event) => {
     event.preventDefault();
-    const response = await fetch(`/api/profile/${userID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newProfile),
-    });
-    const data = await response.json();
-    console.log(data);
-    handleClose(); // Close the dialog after saving
+
+    // Get CSRF Token
+    const csrfToken = Cookies.get('csrftoken');
+    if (!csrfToken) {
+      console.error('CSRF-токен отсутствует.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/profile/${userID}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          ...getAuthHeaders(), // Include Authorization headers
+        },
+        body: JSON.stringify(newProfile),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Profile updated successfully:', data);
+
+        // Update the parent state to reflect changes immediately
+        onUpdateProfile(newProfile);
+
+        handleClose(); // Close the dialog after saving
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to update profile:', errorText);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
 
   return (
@@ -54,7 +79,7 @@ const ProfileEditForm = ({ profile }) => {
                   type="url"
                   className={styles.input}
                   required
-                  defaultValue={profile?.avatar}
+                  value={newProfile.avatar}
                   onChange={(e) =>
                     setNewProfile({ ...newProfile, avatar: e.target.value })
                   }
@@ -68,7 +93,7 @@ const ProfileEditForm = ({ profile }) => {
                   className={styles.textarea}
                   rows="4"
                   required
-                  defaultValue={profile?.bio}
+                  value={newProfile.bio}
                   onChange={(e) =>
                     setNewProfile({ ...newProfile, bio: e.target.value })
                   }
