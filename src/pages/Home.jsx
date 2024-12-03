@@ -60,68 +60,64 @@ const ThreadListPage = () => {
       };
 
       return (
-        <div className={styles.pageContainer}>
-        <Header />
-        <div className={styles.contentWrapper}>
-          {/* Left Sidebar */}
-          <aside className={styles.leftSidebar}>
+      <div className={styles.pageContainer}>
+        <Header/>
+      <div className={styles.contentWrapper}>
+        
+        <aside className={styles.leftSidebar}>
+        <div className={styles.leftHeader}>
+            
+          </div>
+          <div className={styles.topicList}>
             <h2>Topics</h2>
-            <div className={styles.topicList}>
-              {Object.keys(topics).map((key) => (
-                <div key={key} className={styles.topics}>
-                  <Link to={`/topic/${key}`} className={styles.topicLink}>
-                    {topics[key]}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </aside>
-      
-          {/* Main Content */}
-          <main className={styles.mainContent}>
-            <div className={styles.header}>
-              <h2>Latest Threads</h2>
-              <ThreadForm />
-            </div>
-            <div className={styles.threadContainer}>
-              <InfiniteScroll
-                dataLength={threads.length}
-                next={fetchData}
-                hasMore={hasMore}
-                loader={<p className={styles.loaderText}>Loading...</p>}
-                endMessage={
-                  <p className={styles.endMessage}>
-                    You have seen all the threads.
-                  </p>
-                }
-              >
-                {threads.map((thread, index) => (
-                  <ThreadListItem key={index} thread={thread} />
-                ))}
-              </InfiniteScroll>
-            </div>
-          </main>
-      
-            {/*Right SideBar*/}
-          <aside className={styles.rightSidebar}>
-            <h2>Top Threads</h2>
-            {topThreads.map((thread) => (
-              <div key={thread.id} className={styles.topThread}>
-                <Link to={`/threads/${thread.id}`} className={styles.threadLink}>
-                  <div className={styles.threadCard}>
-                    <h3>{thread.subject}</h3>
-                    <p className={styles.threadCreator}>{thread.creator}</p>
-                    <p className={styles.threadReplyCount}>
-                      Replies: {thread.replyCount}
-                    </p>
-                  </div>
+            {Object.keys(topics).map((key) => (
+              <div key={key} className={styles.topics}>
+                <Link to={`/topic/${key}`} className={styles.topicLink}>
+                  {topics[key]}
                 </Link>
               </div>
             ))}
-          </aside>
-        </div>
+          </div>
+        </aside>
+
+       
+        <main className={styles.mainContent}>
+          <div className={styles.header}>
+            <h2>Latest Threads</h2>
+            <ThreadForm />
+          </div>
+          <div className={styles.threadContainer}>
+            <InfiniteScroll
+              dataLength={threads.length}
+              next={fetchData}
+              hasMore={hasMore}
+              loader={<p className={styles.loaderText}>Loading...</p>}
+              endMessage={<p className={styles.endMessage}>You have seen all the threads.</p>}
+            >
+              {threads.map((thread, index) => (
+                <ThreadListItem key={index} thread={thread} />
+              ))}
+            </InfiniteScroll>
+          </div>
+        </main>
+
+        <aside className={styles.rightSidebar}>
+          <h2>Top Threads</h2>
+          {topThreads.map((thread) => (
+            <div key={thread.id} className={styles.topThread}>
+              <Link to={`/threads/${thread.id}`} className={styles.threadLink}>
+                <div className={styles.threadCard}>
+                  <h3>{thread.subject}</h3>
+                  <p className={styles.threadCreator}>{thread.creator}</p>
+                  <p className={styles.threadReplyCount}>Replies: {thread.replyCount}</p>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </aside>
       </div>
-      
+    </div>
+
   );
 };
 

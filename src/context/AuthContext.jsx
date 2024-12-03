@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
+  // Проверяем, есть ли токены в localStorage при загрузке
   const initialAuthTokens = localStorage.getItem('authTokens')
     ? JSON.parse(localStorage.getItem('authTokens'))
     : null;
@@ -59,61 +60,72 @@ export const AuthProvider = ({ children }) => {
     }
   }, [authTokens]);
 
-  // Handle user login
+  // Обработчик для входа пользователя
   const loginUser = async (e) => {
     e.preventDefault();
     const credentials = new FormData(e.currentTarget);
 
-    const response = await fetch(`/api/token/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: credentials.get('username'),
-        password: credentials.get('password'),
-      }),
-    });
+    try {
+      const response = await fetch(`/api/token/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: credentials.get('username'),
+          password: credentials.get('password'),
+        }),
+      });
 
-    const data = await response.json();
-
-    if (response.status === 200) {
-      setAuthTokens(data);
-      setUser(jwt_decode(data.access));
-      localStorage.setItem('authTokens', JSON.stringify(data));
-      navigate('/');
-    } else {
-      alert('Something went wrong!');
+      if (response.ok) {
+        const data = await response.json();
+        setAuthTokens(data);
+        setUser(jwt_decode(data.access));
+        localStorage.setItem('authTokens', JSON.stringify(data));
+        navigate('/');
+      } else {
+        const errorText = await response.text();
+        console.error('Ошибка при входе пользователя:', errorText);
+        alert('Что-то пошло не так!');
+      }
+    } catch (error) {
+      console.error('Ошибка при входе пользователя:', error);
+      alert('Что-то пошло не так!');
     }
   };
 
-  // Handle user registration
+  // Обработчик для регистрации пользователя
   const registerUser = async (e) => {
     e.preventDefault();
     const credentials = new FormData(e.currentTarget);
 
-    const response = await fetch('/api/register/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: credentials.get('username'),
-        email: credentials.get('email'),
-        password: credentials.get('password'),
-        password2: credentials.get('password2'),
-      }),
-    });
+    try {
+      const response = await fetch('/api/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: credentials.get('username'),
+          email: credentials.get('email'),
+          password: credentials.get('password'),
+          password2: credentials.get('password2'),
+        }),
+      });
 
-    const data = await response.json();
-
-    if (response.status === 201) {
-      navigate('/login');
-    } else {
-      return { errors: Object.values(data).flat() };
+      if (response.ok) {
+        navigate('/login');
+      } else {
+        const data = await response.json();
+        console.error('Ошибка при регистрации пользователя:', data);
+        return { errors: Object.values(data).flat() };
+      }
+    } catch (error) {
+      console.error('Ошибка при регистрации пользователя:', error);
     }
   };
 
+  // Обработчик для выхода пользователя
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);

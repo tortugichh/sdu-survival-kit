@@ -4,10 +4,11 @@ import AuthContext from '../context/AuthContext';
 import PostCardItem from '../components/PostCardItem';
 import ReplyForm from '../components/ReplyForm';
 import styles from '../styles/Thread.module.css';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 const Thread = () => {
-  let { user } = useContext(AuthContext);
-
+  const { user, authTokens, setAuthTokens, logoutUser } = useContext(AuthContext);
   const params = useParams();
   const threadID = params.id;
 
@@ -16,83 +17,227 @@ const Thread = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [pin, setPin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getBookmark = async () => {
-      if (user) {
-        const response = await fetch(`/api/pin/${threadID}&&${user['user_id']}`);
-        const data = await response.json();
-        setPin(JSON.parse(data.pinned));
-      }
-    };
-    getBookmark();
-  }, [threadID, user]);
+  const getCSRFToken = () => {
+    const csrfToken = Cookies.get('csrftoken');
+    if (!csrfToken) {
+      console.error('CSRF-токен отсутствует.');
+    }
+    return csrfToken;
+  };
 
-  useEffect(() => {
-    const getThread = async () => {
-      const response = await fetch(`/api/threads/${threadID}`);
-      const data = await response.json();
-      setThread(data);
-    };
-    getThread();
-  }, [threadID]);
+  const refreshAccessToken = async () => {
+    if (!authTokens?.refresh) {
+      logoutUser();
+      return null;
+    }
 
-  useEffect(() => {
-    const getPosts = async () => {
-      const response = await fetch(`/api/threads/${threadID}/posts?page=${page}`);
-      const data = await response.json();
-      setPosts(data.results);
-      if (data.next === null) {
-        setHasMore(false);
-      }
-      setPage(page + 1);
-    };
-    getPosts();
-  }, [threadID]);
-
-  const getMorePosts = async () => {
     try {
-      const response = await fetch(`/api/threads/${threadID}/posts?page=${page}`);
+      const response = await fetch('/api/token/refresh/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh: authTokens.refresh }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAuthTokens((prevTokens) => ({ ...prevTokens, access: data.access }));
+        return data.access;
+      } else {
+        console.error('Не удалось обновить токен доступа:', await response.text());
+        logoutUser();
+      }
+    } catch (error) {
+      console.error('Ошибка при обновлении токена доступа:', error);
+      logoutUser();
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    if (!authTokens) {
+      console.error('Токены доступа отсутствуют. Перенаправляем пользователя на страницу входа.');
+      // Перенаправьте пользователя на страницу входа
+      window.location.href = '/login';
+      return;
+    }
+
+    const fetchThread = async () => {
+      try {
+        const response = await fetch(`/api/threads/${threadID}`);
+        if (!response.ok) {
+          console.error('Failed to fetch thread:', response.statusText);
+          return;
+        }
+        const data = await response.json();
+        setThread(data);
+      } catch (error) {
+        console.error('Error fetching thread:', error);
+      }
+    };
+
+    const fetchPosts = async () => {
+      try {
+        let accessToken = authTokens.access;
+
+        // Проверяем и обновляем токен, если он истек
+        if (isTokenExpired(accessToken)) {
+          accessToken = await refreshAccessToken();
+          if (!accessToken) {
+            console.error('Не удалось обновить токен доступа.');
+            return;
+          }
+        }
+
+        const response = await fetch(`/api/threads/${threadID}/posts?page=1`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Failed to fetch posts:', errorText);
+          return;
+        }
+        const data = await response.json();
+        setPosts(data.results);
+        setHasMore(data.next !== null);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    const fetchPinStatus = async () => {
+      if (user) {
+        try {
+          const response = await fetch(`/api/pin/${threadID}&&${user.user_id}`);
+          if (!response.ok) return;
+          const data = await response.json();
+          setPin(JSON.parse(data.pinned));
+        } catch (error) {
+          console.error('Error fetching pin status:', error);
+        }
+      }
+    };
+
+    setLoading(true); // Start loading
+    Promise.all([fetchThread(), fetchPosts(), fetchPinStatus()]).then(() =>
+      setLoading(false)
+    );
+  }, [threadID, user, authTokens]);
+
+  const handleLoadMore = async () => {
+    if (!authTokens) {
+      console.error('Токены доступа отсутствуют. Пользователь не авторизован.');
+      return;
+    }
+
+    try {
+      let accessToken = authTokens.access;
+
+      // Проверяем и обновляем токен, если он истек
+      if (isTokenExpired(accessToken)) {
+        accessToken = await refreshAccessToken();
+        if (!accessToken) {
+          console.error('Не удалось обновить токен доступа.');
+          return;
+        }
+      }
+
+      const response = await fetch(`/api/threads/${threadID}/posts?page=${page}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to fetch more posts:', errorText);
+        return;
+      }
       const data = await response.json();
-      return data.results;
-    } catch {
-      console.log('No next page.');
-      return [];
+      setPosts((prevPosts) => [...prevPosts, ...data.results]);
+      setHasMore(data.next !== null);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      console.error('Error fetching more posts:', error);
     }
   };
 
-  const fetchData = async () => {
-    const morePosts = await getMorePosts();
-    setPosts((prevPosts) => [...prevPosts, ...morePosts]);
-    if (morePosts.length === 0 || morePosts.length < 10) {
-      setHasMore(false);
+  const handlePinToggle = async () => {
+    if (!authTokens) {
+      console.error('Токены доступа отсутствуют. Пользователь не авторизован.');
+      return;
     }
-    setPage(page + 1);
+
+    try {
+      const csrfToken = getCSRFToken();
+      if (!csrfToken) {
+        console.error('CSRF token not found.');
+        return;
+      }
+
+      const response = await fetch(`/api/pin/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          'Authorization': `Bearer ${authTokens.access}`,
+        },
+        body: JSON.stringify({
+          user: user.user_id,
+          thread: threadID,
+          pin: !pin,
+        }),
+      });
+
+      if (response.ok) {
+        setPin(!pin);
+      } else {
+        console.error('Failed to update pin status:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error updating pin status:', error);
+    }
   };
 
-  const handleBookmark = async () => {
-    setPin(!pin);
-    const response = await fetch(`/api/pin/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user: user['user_id'],
-        thread: threadID,
-        pin: pin ? false : true,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
+  const isTokenExpired = (token) => {
+    try {
+      if (!token) {
+        console.error('Токен отсутствует или пуст.');
+        return true;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decodedToken.exp < currentTime;
+    } catch (error) {
+      console.error('Ошибка при декодировании токена:', error);
+      return true;
+    }
   };
+
+  if (loading) {
+    return <p>Loading thread and posts...</p>;
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.cardHeader}>
           <h2 className={styles.title}>{thread?.subject}</h2>
-          <button className={styles.moreButton}>⋮</button>
+          {user && (
+            <button
+              className={`${styles.bookmarkButton} ${pin ? styles.pinned : ''}`}
+              onClick={handlePinToggle}
+            >
+              {pin ? 'Unpin' : 'Pin'}
+            </button>
+          )}
         </div>
         <div className={styles.content}>
           <p className={styles.text}>{thread?.content}</p>
@@ -100,19 +245,8 @@ const Thread = () => {
         <div className={styles.meta}>
           <Link to={`/profile/${thread?.creator_id}`} className={styles.creator}>
             {thread?.creator}
-          </Link>{' '}
-          posted on {thread?.created}
-        </div>
-        <div className={styles.actions}>
-          {user && (
-            <button
-              className={`${styles.bookmarkButton} ${pin ? styles.pinned : ''}`}
-              onClick={handleBookmark}
-            >
-              {pin ? 'Unpin' : 'Pin'}
-            </button>
-          )}
-          <button className={styles.shareButton}>Share</button>
+          </Link>
+          {' '}posted on {thread?.created}
         </div>
       </div>
 
@@ -121,14 +255,14 @@ const Thread = () => {
           <PostCardItem key={index} post={post} />
         ))}
         {hasMore && (
-          <button className={styles.loadMoreButton} onClick={fetchData}>
+          <button className={styles.loadMoreButton} onClick={handleLoadMore}>
             Load More
           </button>
         )}
         {!hasMore && <p className={styles.endMessage}>You have seen all the posts.</p>}
       </div>
 
-      <ReplyForm thread={thread} />
+      {user && <ReplyForm thread={thread} />}
     </div>
   );
 };
