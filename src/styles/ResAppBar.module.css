@@ -48,7 +48,7 @@
 }
 
 .navLink {
-  color: white;
+  color: black;
   text-decoration: none;
   font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
@@ -103,6 +103,7 @@
 
 .dropdownContent a:hover {
   background-color: #f5f5f5;
+  color: #333;
 }
 
 .dropdown:hover .dropdownContent {

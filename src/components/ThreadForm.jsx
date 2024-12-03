@@ -2,9 +2,10 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/ThreadForm.module.css';
+import Cookies from 'js-cookie';
 
 const ThreadForm = () => {
-  const { user } = useContext(AuthContext);
+  const { user, authTokens } = useContext(AuthContext);
 
   const [alertShow, setAlertShow] = useState(false);
   const [open, setOpen] = useState(false);
@@ -12,7 +13,6 @@ const ThreadForm = () => {
     subject: '',
     content: '',
     topic: '',
-    creator: { user },
   });
 
   const handleClickOpen = () => setOpen(true);
@@ -37,17 +37,44 @@ const ThreadForm = () => {
       return;
     }
 
-    const response = await fetch(`/api/threads/create/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-  
-      },
-      body: JSON.stringify(thread),
-    });
+    const updatedThread = {
+      ...thread,
+    };
 
-    const data = await response.json();
-    console.log(data);
+    let accessToken = authTokens.access; 
+
+    try {
+      const csrfToken = Cookies.get('csrftoken');
+
+      if (!csrfToken) {
+        console.error('CSRF-токен отсутствует.');
+        return;
+      }
+
+      const response = await fetch(`/api/threads/create/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(updatedThread),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Thread created:', data);
+        setThread({ subject: '', content: '', topic: '' }); 
+        handleClose();
+
+        window.location.reload();
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to create thread:', errorText);
+      }
+    } catch (error) {
+      console.error('Error creating thread:', error);
+    }
   };
 
   return (
@@ -64,7 +91,7 @@ const ThreadForm = () => {
             {alertShow && (
               <div className={styles.alert}>
                 <p>
-                  Please login to add new thread.{' '}
+                  Please login to add a new thread.{' '}
                   <Link to="/login">Click here to login.</Link>
                 </p>
                 <button
@@ -129,12 +156,7 @@ const ThreadForm = () => {
                   required
                   value={thread.content}
                   onChange={(e) =>
-                    setThread({
-                      ...thread,
-                      content: e.target.value
-                        .replace(/\\n/g, '\n')
-                        .replace(/\\"/g, '"'),
-                    })
+                    setThread({ ...thread, content: e.target.value })
                   }
                 />
               </div>

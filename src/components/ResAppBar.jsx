@@ -17,8 +17,8 @@ const options = {
 const ResAppBar = () => {
   const [profile, setProfile] = useState();
   const [navOpen, setNavOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const { user, logoutUser } = useContext(AuthContext);
 
@@ -38,14 +38,6 @@ const ResAppBar = () => {
     setNavOpen(!navOpen);
   };
 
-  const toggleUserMenu = () => {
-    setUserMenuOpen(!userMenuOpen);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
   return (
     <header className={styles.appBar}>
       <div className={styles.container}>
@@ -57,24 +49,21 @@ const ResAppBar = () => {
             ☰
           </button>
           <nav className={`${styles.navMenu} ${navOpen ? styles.open : ''}`}>
-            <Link to="/" className={styles.navLink} onClick={toggleNavMenu}>
-             
-            </Link>
             <div
               className={`${styles.dropdown} ${
                 dropdownOpen ? styles.dropdownOpen : ''
               }`}
-              onMouseEnter={toggleDropdown}
-              onMouseLeave={toggleDropdown}
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
             >
-              <button className={styles.dropbtn}>Topics <img src='/arrow.png'></img></button>
+              <button className={styles.dropbtn}>Topics</button>
               <div className={styles.dropdownContent}>
                 {Object.keys(options).map((key) => (
                   <Link
                     key={key}
                     to={`/topic/${key}`}
                     className={styles.navLink}
-                    onClick={toggleNavMenu}
+                    onClick={() => setNavOpen(false)}
                   >
                     {options[key]}
                   </Link>
@@ -84,39 +73,41 @@ const ResAppBar = () => {
           </nav>
           <div className={styles.userSection}>
             {user ? (
-              <div className={styles.loggedInSection}>
-                <Link
-                  to={`/profile/${user.user_id}`}
-                  className={styles.userName}
-                >
-                  {user.username}
-                </Link>
-                <button
-                  className={styles.avatarButton}
-                  onClick={toggleUserMenu}
-                >
+              <div
+                className={styles.dropdown}
+                onMouseEnter={() => setUserDropdownOpen(true)}
+                onMouseLeave={() => setUserDropdownOpen(false)}
+              >
+                <button className={styles.avatarButton}>
                   <img
                     src={profile?.avatar || '/default-avatar.png'}
                     alt="User Avatar"
                     className={styles.avatar}
                   />
                 </button>
-                {userMenuOpen && (
-                  <div className={styles.userMenu}>
-                    <Link
-                      to={`/profile/${user['user_id']}`}
-                      className={styles.menuItem}
-                    >
-                      Profile
-                    </Link>
-                    <Link to="/bookmark" className={styles.menuItem}>
-                      Bookmark
-                    </Link>
-                    <button onClick={logoutUser} className={styles.menuItem}>
-                      Logout
-                    </button>
-                  </div>
-                )}
+                <div
+                className={`${styles.dropdownContent} ${
+                  userDropdownOpen ? styles.dropdownOpen : ''
+                }`}
+                >
+                <Link to={`/profile/${user.user_id}`} className={styles.navLink}>
+                  Profile
+                </Link>
+                <Link to="/bookmark" className={styles.navLink}>
+                  Bookmark
+                </Link>
+                <Link
+                  to="#"
+                  onClick={(e) => {
+                    e.preventDefault(); // Чтобы ссылка не перезагружала страницу
+                    logoutUser();
+                  }}
+                  className={styles.navLink}
+                >
+                  Logout
+                </Link>
+              </div>
+
               </div>
             ) : (
               <div className={styles.authLinks}>
