@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 
 const Thread = () => {
-  const { user, authTokens, setAuthTokens, logoutUser } = useContext(AuthContext);
+  const { user, getAuthHeaders, updateToken, authTokens } = useContext(AuthContext);
   const params = useParams();
   const threadID = params.id;
 
@@ -27,34 +27,20 @@ const Thread = () => {
     return csrfToken;
   };
 
-  const refreshAccessToken = async () => {
-    if (!authTokens?.refresh) {
-      logoutUser();
-      return null;
-    }
-
+  const isTokenExpired = (token) => {
     try {
-      const response = await fetch('/api/token/refresh/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refresh: authTokens.refresh }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAuthTokens((prevTokens) => ({ ...prevTokens, access: data.access }));
-        return data.access;
-      } else {
-        console.error('Не удалось обновить токен доступа:', await response.text());
-        logoutUser();
+      if (!token) {
+        console.error('Токен отсутствует или пуст.');
+        return true;
       }
+
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decodedToken.exp < currentTime;
     } catch (error) {
-      console.error('Ошибка при обновлении токена доступа:', error);
-      logoutUser();
+      console.error('Ошибка при декодировании токена:', error);
+      return true;
     }
-    return null;
   };
 
   useEffect(() => {
@@ -66,18 +52,16 @@ const Thread = () => {
 
     const fetchThread = async () => {
       try {
-        const response = await fetch(`/api/threads/${threadID}/`);
+        const response = await fetch(`/api/threads/${threadID}/`, {
+          headers: getAuthHeaders(), // Use the helper function for Authorization
+        });
+
         if (!response.ok) {
           console.error('Failed to fetch thread:', response.statusText);
           return;
         }
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          setThread(data);
-        } else {
-          console.error('Expected JSON but got HTML instead:', await response.text());
-        }
+        const data = await response.json();
+        setThread(data);
       } catch (error) {
         console.error('Error fetching thread:', error);
       }
@@ -88,7 +72,8 @@ const Thread = () => {
         let accessToken = authTokens.access;
 
         if (isTokenExpired(accessToken)) {
-          accessToken = await refreshAccessToken();
+          await updateToken();
+          accessToken = authTokens.access;
           if (!accessToken) {
             console.error('Не удалось обновить токен доступа.');
             return;
@@ -96,24 +81,17 @@ const Thread = () => {
         }
 
         const response = await fetch(`/api/threads/${threadID}/posts/?page=1`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
+          headers: getAuthHeaders(), // Use the helper function for Authorization
         });
+
         if (!response.ok) {
           const errorText = await response.text();
           console.error('Failed to fetch posts:', errorText);
           return;
         }
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          setPosts(data.results);
-          setHasMore(data.next !== null);
-        } else {
-          console.error('Expected JSON but got HTML instead:', await response.text());
-        }
+        const data = await response.json();
+        setPosts(data.results);
+        setHasMore(data.next !== null);
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
@@ -122,15 +100,13 @@ const Thread = () => {
     const fetchPinStatus = async () => {
       if (user) {
         try {
-          const response = await fetch(`/api/pin/${threadID}&&${user.user_id}/`);
+          const response = await fetch(`/api/pin/${threadID}&&${user.user_id}/`, {
+            headers: getAuthHeaders(), // Use the helper function for Authorization
+          });
           if (!response.ok) return;
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
-            const data = await response.json();
-            setPin(JSON.parse(data.pinned));
-          } else {
-            console.error('Expected JSON but got HTML instead:', await response.text());
-          }
+
+          const data = await response.json();
+          setPin(JSON.parse(data.pinned));
         } catch (error) {
           console.error('Error fetching pin status:', error);
         }
@@ -138,10 +114,8 @@ const Thread = () => {
     };
 
     setLoading(true);
-    Promise.all([fetchThread(), fetchPosts(), fetchPinStatus()]).then(() =>
-      setLoading(false)
-    );
-  }, [threadID, user, authTokens]);
+    Promise.all([fetchThread(), fetchPosts(), fetchPinStatus()]).then(() => setLoading(false));
+  }, [threadID, user, authTokens, getAuthHeaders]);
 
   const handleLoadMore = async () => {
     if (!authTokens) {
@@ -153,7 +127,8 @@ const Thread = () => {
       let accessToken = authTokens.access;
 
       if (isTokenExpired(accessToken)) {
-        accessToken = await refreshAccessToken();
+        await updateToken();
+        accessToken = authTokens.access;
         if (!accessToken) {
           console.error('Не удалось обновить токен доступа.');
           return;
@@ -161,25 +136,18 @@ const Thread = () => {
       }
 
       const response = await fetch(`/api/threads/${threadID}/posts/?page=${page}`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
+        headers: getAuthHeaders(), // Use the helper function for Authorization
       });
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Failed to fetch more posts:', errorText);
         return;
       }
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        setPosts((prevPosts) => [...prevPosts, ...data.results]);
-        setHasMore(data.next !== null);
-        setPage((prevPage) => prevPage + 1);
-      } else {
-        console.error('Expected JSON but got HTML instead:', await response.text());
-      }
+      const data = await response.json();
+      setPosts((prevPosts) => [...prevPosts, ...data.results]);
+      setHasMore(data.next !== null);
+      setPage((prevPage) => prevPage + 1);
     } catch (error) {
       console.error('Error fetching more posts:', error);
     }
@@ -201,9 +169,8 @@ const Thread = () => {
       const response = await fetch(`/api/pin/`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          ...getAuthHeaders(), // Use the helper function and add CSRF token
           'X-CSRFToken': csrfToken,
-          'Authorization': `Bearer ${authTokens.access}`,
         },
         body: JSON.stringify({
           thread: threadID,
@@ -217,22 +184,6 @@ const Thread = () => {
       }
     } catch (error) {
       console.error('Error updating pin status:', error);
-    }
-  };
-
-  const isTokenExpired = (token) => {
-    try {
-      if (!token) {
-        console.error('Токен отсутствует или пуст.');
-        return true;
-      }
-
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      return decodedToken.exp < currentTime;
-    } catch (error) {
-      console.error('Ошибка при декодировании токена:', error);
-      return true;
     }
   };
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/BookmarkThreadListItem.module.css';
+import Cookies from 'js-cookie';
 
 const BookmarkThreadListItem = ({ thread }) => {
   const { user } = useContext(AuthContext);
@@ -11,20 +12,37 @@ const BookmarkThreadListItem = ({ thread }) => {
   const handleBookmark = async () => {
     setHide(true);
 
-    const response = await fetch(`/api/pin/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user: user['user_id'],
-        thread: thread.id,
-        pin: false,
-      }),
-    });
+    // Get CSRF Token
+    const csrfToken = Cookies.get('csrftoken');
+    if (!csrfToken) {
+      console.error('CSRF-токен отсутствует.');
+      return;
+    }
 
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch(`/api/pin/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+          user: user['user_id'],
+          thread: thread.id,
+          pin: false,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to remove bookmark:', errorText);
+      }
+    } catch (error) {
+      console.error('Error handling bookmark:', error);
+    }
   };
 
   return (

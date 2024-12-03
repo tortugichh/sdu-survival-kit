@@ -5,30 +5,38 @@ import ProfileEditForm from '../components/ProfileEditForm';
 import styles from '../styles/Profile.module.css';
 
 const Profile = () => {
-  let { user } = useContext(AuthContext);
+  let { user, authTokens } = useContext(AuthContext);  // Import authTokens from the AuthContext
 
- 
   let params = useParams();
   let profileID = params.id;
 
-
   let isMyself = user !== null && user['user_id'] === parseInt(profileID);
-
 
   const [profile, setProfile] = useState();
 
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const response = await fetch(`/api/profile/${profileID}`);
-        let data = await response.json();
-        setProfile(data);
+        const response = await fetch(`/api/profile/${profileID}`, {
+          headers: {
+            'Authorization': `Bearer ${authTokens?.access}`,  // Use the authTokens here
+          },
+        });
+        if (response.ok) {
+          let data = await response.json();
+          setProfile(data);
+        } else {
+          console.error('Failed to fetch the profile data, authorization issue.');
+        }
       } catch (err) {
-        console.error('The requested profile does not exist.');
+        console.error('The requested profile does not exist or unauthorized.');
       }
     };
-    getProfile();
-  }, [profileID]);
+
+    if (authTokens) {
+      getProfile();
+    }
+  }, [profileID, authTokens]);
 
   return (
     <div className={styles.container}>

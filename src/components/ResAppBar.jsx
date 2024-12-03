@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/ResAppBar.module.css';
+import jwtDecode from 'jwt-decode';
 
 const options = {
   1: 'Social life',
@@ -20,19 +21,54 @@ const ResAppBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  const { user, logoutUser } = useContext(AuthContext);
+  const { user, logoutUser, getAuthHeaders, updateToken, authTokens } = useContext(AuthContext);
 
   useEffect(() => {
     const getProfile = async () => {
       if (user !== null) {
         let userID = user['user_id'];
-        const response = await fetch(`./api/profile/${userID}`);
-        let data = await response.json();
-        setProfile(data);
+
+        try {
+          // Ensure token is updated if expired
+          if (authTokens && isTokenExpired(authTokens.access)) {
+            await updateToken();
+          }
+
+          const response = await fetch(`http://127.0.0.1:8000/api/profile/${userID}/`, {
+            headers: getAuthHeaders(),
+          });
+
+          if (!response.ok) {
+            console.error('Failed to load profile. Unauthorized request.');
+            return;
+          }
+
+          const data = await response.json();
+          setProfile(data);
+        } catch (err) {
+          console.error('The requested profile does not exist or unauthorized.');
+        }
       }
     };
+
     getProfile();
-  }, [user]);
+  }, [user, authTokens, getAuthHeaders, updateToken]);
+
+  const isTokenExpired = (token) => {
+    try {
+      if (!token) {
+        console.error('Токен отсутствует или пуст.');
+        return true;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decodedToken.exp < currentTime;
+    } catch (error) {
+      console.error('Ошибка при декодировании токена:', error);
+      return true;
+    }
+  };
 
   const toggleNavMenu = () => {
     setNavOpen(!navOpen);
@@ -50,9 +86,7 @@ const ResAppBar = () => {
           </button>
           <nav className={`${styles.navMenu} ${navOpen ? styles.open : ''}`}>
             <div
-              className={`${styles.dropdown} ${
-                dropdownOpen ? styles.dropdownOpen : ''
-              }`}
+              className={`${styles.dropdown} ${dropdownOpen ? styles.dropdownOpen : ''}`}
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
@@ -86,28 +120,27 @@ const ResAppBar = () => {
                   />
                 </button>
                 <div
-                className={`${styles.dropdownContent} ${
-                  userDropdownOpen ? styles.dropdownOpen : ''
-                }`}
+                  className={`${styles.dropdownContent} ${
+                    userDropdownOpen ? styles.dropdownOpen : ''
+                  }`}
                 >
-                <Link to={`/profile/${user.user_id}`} className={styles.navLink}>
-                  Profile
-                </Link>
-                <Link to="/bookmark" className={styles.navLink}>
-                  Bookmark
-                </Link>
-                <Link
-                  to="#"
-                  onClick={(e) => {
-                    e.preventDefault(); // Чтобы ссылка не перезагружала страницу
-                    logoutUser();
-                  }}
-                  className={styles.navLink}
-                >
-                  Logout
-                </Link>
-              </div>
-
+                  <Link to={`/profile/${user.user_id}`} className={styles.navLink}>
+                    Profile
+                  </Link>
+                  <Link to="/bookmark" className={styles.navLink}>
+                    Bookmark
+                  </Link>
+                  <Link
+                    to="#"
+                    onClick={(e) => {
+                      e.preventDefault(); // Чтобы ссылка не перезагружала страницу
+                      logoutUser();
+                    }}
+                    className={styles.navLink}
+                  >
+                    Logout
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className={styles.authLinks}>

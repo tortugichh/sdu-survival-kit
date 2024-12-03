@@ -2,22 +2,51 @@ import React, { useState, useEffect, useContext } from 'react';
 import BookmarkThreadListItem from '../components/BookmarkThreadListItem';
 import AuthContext from '../context/AuthContext';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import styles from '../styles/Bookmark.module.css';
+import jwtDecode from 'jwt-decode';
 
 const Bookmark = () => {
-  const { user } = useContext(AuthContext);
+  const { user, getAuthHeaders, authTokens, updateToken } = useContext(AuthContext);
 
   const [threads, setThreads] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+  const isTokenExpired = (token) => {
+    try {
+      if (!token) {
+        console.error('Токен отсутствует или пуст.');
+        return true;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      return decodedToken.exp < currentTime;
+    } catch (error) {
+      console.error('Ошибка при декодировании токена:', error);
+      return true;
+    }
+  };
 
   useEffect(() => {
     if (!user) return; // Ensure user is defined before making API call
 
     const getThreads = async () => {
       try {
-        const response = await fetch(`/api/bookmark/${user['user_id']}?page=1`); // Start from page 1
+        // Ensure token is updated if expired
+        if (authTokens && isTokenExpired(authTokens.access)) {
+          await updateToken();
+        }
+
+        const response = await fetch(`/api/bookmark/${user['user_id']}?page=1`, {
+          headers: getAuthHeaders(),
+        });
+
+        if (!response.ok) {
+          console.error('Failed to load bookmarked threads. Unauthorized request.');
+          return;
+        }
+
         const data = await response.json();
         setThreads(data.results);
 
@@ -30,13 +59,25 @@ const Bookmark = () => {
     };
 
     getThreads();
-  }, [user]);
+  }, [user, authTokens, getAuthHeaders, updateToken]);
 
   const fetchMoreThreads = async () => {
     try {
-      const response = await fetch(`/api/bookmark/${user['user_id']}?page=${page}`);
-      const data = await response.json();
+      // Ensure token is updated if expired
+      if (authTokens && isTokenExpired(authTokens.access)) {
+        await updateToken();
+      }
 
+      const response = await fetch(`/api/bookmark/${user['user_id']}?page=${page}`, {
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to load more bookmarked threads. Unauthorized request.');
+        return;
+      }
+
+      const data = await response.json();
       setThreads((prevThreads) => [...prevThreads, ...data.results]);
 
       if (data.results.length === 0 || data.next === null) {

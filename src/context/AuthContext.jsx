@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  // Проверяем, есть ли токены в localStorage при загрузке
+  // Initialize tokens from localStorage
   const initialAuthTokens = localStorage.getItem('authTokens')
     ? JSON.parse(localStorage.getItem('authTokens'))
     : null;
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [authTokens, setAuthTokens] = useState(initialAuthTokens);
   const [user, setUser] = useState(initialUser);
 
-  // Функция для обновления токенов
+  // Function to update the token
   const updateToken = async () => {
     if (!authTokens?.refresh) {
       logoutUser();
@@ -50,17 +50,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Запускаем интервал для обновления токена
+  // Set up interval for refreshing the token every 4 minutes
   useEffect(() => {
     if (authTokens) {
       const interval = setInterval(() => {
         updateToken();
-      }, 1000 * 60 * 4); // Обновляем токен каждые 4 минуты
+      }, 1000 * 60 * 4); // Refresh token every 4 minutes
       return () => clearInterval(interval);
     }
   }, [authTokens]);
 
-  // Обработчик для входа пользователя
+  // Function to log in the user
   const loginUser = async (e) => {
     e.preventDefault();
     const credentials = new FormData(e.currentTarget);
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Обработчик для регистрации пользователя
+  // Function to register the user
   const registerUser = async (e) => {
     e.preventDefault();
     const credentials = new FormData(e.currentTarget);
@@ -125,12 +125,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Обработчик для выхода пользователя
+  // Function to log out the user
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
     localStorage.removeItem('authTokens');
     navigate('/');
+  };
+
+  // Helper function to get headers with token for authorized requests
+  const getAuthHeaders = () => {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authTokens?.access}`,
+    };
   };
 
   const contextData = {
@@ -139,6 +147,8 @@ export const AuthProvider = ({ children }) => {
     loginUser,
     logoutUser,
     registerUser,
+    updateToken,
+    getAuthHeaders, // Add getAuthHeaders to context
   };
 
   return <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>;
