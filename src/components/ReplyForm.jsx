@@ -2,9 +2,10 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/ReplyForm.module.css';
+import Cookies from 'js-cookie';
 
 const ReplyForm = ({ thread }) => {
-  const { user } = useContext(AuthContext);
+  const { user, authTokens } = useContext(AuthContext);
   const threadID = thread?.id;
 
   const [alertShow, setAlertShow] = useState(false);
@@ -26,16 +27,40 @@ const ReplyForm = ({ thread }) => {
       return;
     }
 
-    const response = await fetch(`/api/threads/create/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(post),
-    });
+    // Get CSRF Token
+    const csrfToken = Cookies.get('csrftoken');
+    if (!csrfToken) {
+      console.error('CSRF-токен отсутствует.');
+      return;
+    }
 
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch(`/api/posts/create/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          'Authorization': `Bearer ${authTokens.access}`,
+        },
+        body: JSON.stringify({
+          ...post,
+          thread: threadID,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Post created:', data);
+        setPost({ content: '', thread: '', creator: { user } });
+        handleClose();
+        window.location.reload(); // Reload to display the new reply
+      } else {
+        const errorText = await response.text();
+        console.error('Failed to create post:', errorText);
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
 
   return (

@@ -17,6 +17,6 @@ urlpatterns = [
     re_path(r'^favicon.ico$', serve, {'path': 'favicon.ico', 'document_root': settings.BASE_DIR / 'public'}),
 
     # Все остальные запросы направляются на index.html
-    re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name="index.html")),
+    re_path(r'^(?!api/)(?:.*)/?$', TemplateView.as_view(template_name="index.html")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

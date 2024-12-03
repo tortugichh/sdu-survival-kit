@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthContext';
 import styles from '../styles/ThreadForm.module.css';
 import Cookies from 'js-cookie';
 
-const ThreadForm = () => {
+const ThreadForm = ({ onThreadCreated }) => {
   const { user, authTokens } = useContext(AuthContext);
 
   const [alertShow, setAlertShow] = useState(false);
@@ -41,7 +41,7 @@ const ThreadForm = () => {
       ...thread,
     };
 
-    let accessToken = authTokens.access; 
+    let accessToken = authTokens.access;
 
     try {
       const csrfToken = Cookies.get('csrftoken');
@@ -63,11 +63,13 @@ const ThreadForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Thread created:', data);
-        setThread({ subject: '', content: '', topic: '' }); 
+        setThread({ subject: '', content: '', topic: '' });
         handleClose();
 
-        window.location.reload();
+        // Call the callback function to update the list on the main page
+        if (onThreadCreated) {
+          onThreadCreated(data);
+        }
       } else {
         const errorText = await response.text();
         console.error('Failed to create thread:', errorText);
