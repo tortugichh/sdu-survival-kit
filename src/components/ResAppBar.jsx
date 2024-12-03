@@ -34,7 +34,7 @@ const ResAppBar = () => {
             await updateToken();
           }
 
-          const response = await fetch(`http://127.0.0.1:8000/api/profile/${userID}/`, {
+          const response = await fetch(`/api/profile/${userID}/`, {
             headers: getAuthHeaders(),
           });
 
@@ -90,7 +90,7 @@ const ResAppBar = () => {
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
-              <button className={styles.dropbtn}>Topics</button>
+              <button className={styles.dropbtn}>Topics <img src='/arrow.png'></img></button>
               <div className={styles.dropdownContent}>
                 {Object.keys(options).map((key) => (
                   <Link
