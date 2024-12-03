@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/Login.module.css';
 import { Link } from 'react-router-dom';
+import image from '../assets/image.jpg';
+import logo from '../assets/logo.svg';
 const SignIn = () => {
   const { loginUser } = useContext(AuthContext);
 
@@ -10,7 +12,7 @@ const SignIn = () => {
       <div className={styles.signupCard}>
       
         <div className={styles.imageSection}>
-          <img src="./image.jpg" alt="3D Torus" className={styles.image} />
+          <img src={image} alt="image" className={styles.image} />
         </div>
 
        
@@ -39,7 +41,7 @@ const SignIn = () => {
           </form>
           <footer className={styles.footer}>
           <Link to="/" className={styles.footerLogo}>
-            <img src="/logo.svg" alt="Logo" />
+            <img src={logo} alt="Logo" />
 
           </Link>
            

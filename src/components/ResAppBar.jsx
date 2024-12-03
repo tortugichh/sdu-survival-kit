@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/ResAppBar.module.css';
 import jwtDecode from 'jwt-decode';
-
+import logo from '../assets/logo.svg';
+import arrow from '../assets/arrow.png';
 const options = {
   1: 'Social life',
   2: 'Professors',
@@ -79,7 +80,7 @@ const ResAppBar = () => {
       <div className={styles.container}>
         <div className={styles.toolbar}>
           <Link to="/" className={styles.logo}>
-            <img src="/logo.svg" alt="Logo" />
+            <img src={logo} alt="Logo" />
           </Link>
           <button className={styles.menuButton} onClick={toggleNavMenu}>
             ☰
@@ -90,7 +91,7 @@ const ResAppBar = () => {
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
-              <button className={styles.dropbtn}>Topics <img src='/arrow.png'></img></button>
+              <button className={styles.dropbtn}>Topics <img src={arrow}></img></button>
               <div className={styles.dropdownContent}>
                 {Object.keys(options).map((key) => (
                   <Link

@@ -6,12 +6,10 @@ import styles from '../styles/BookmarkThreadListItem.module.css';
 import Cookies from 'js-cookie';
 
 const BookmarkThreadListItem = ({ thread }) => {
-  const { user } = useContext(AuthContext);
+  const { user, getAuthHeaders } = useContext(AuthContext);
   const [hide, setHide] = useState(false);
 
   const handleBookmark = async () => {
-    setHide(true);
-
     // Get CSRF Token
     const csrfToken = Cookies.get('csrftoken');
     if (!csrfToken) {
@@ -25,20 +23,24 @@ const BookmarkThreadListItem = ({ thread }) => {
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken,
+          ...getAuthHeaders(), // Include Authorization header
         },
         body: JSON.stringify({
           user: user['user_id'],
           thread: thread.id,
-          pin: false,
         }),
       });
 
       if (response.ok) {
+        // The backend toggles between adding and removing bookmarks.
+        // If the bookmark is removed successfully, update the UI
         const data = await response.json();
-        console.log(data);
+        if (data.message === 'Bookmark removed.') {
+          setHide(true);
+        }
       } else {
         const errorText = await response.text();
-        console.error('Failed to remove bookmark:', errorText);
+        console.error('Failed to toggle bookmark:', errorText);
       }
     } catch (error) {
       console.error('Error handling bookmark:', error);

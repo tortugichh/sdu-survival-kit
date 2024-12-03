@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
 import styles from '../styles/Signup.module.css';
 import { Link } from 'react-router-dom';
-
+import image from '../assets/image.jpg';
+import logo from '../assets/logo.svg';
 export default function SignUp() {
   const { registerUser } = useContext(AuthContext); // Get registerUser from context
   const [errors, setErrors] = useState([]); // State for errors
@@ -23,7 +24,7 @@ export default function SignUp() {
     <div className={styles.pageContainer}>
       <div className={styles.signupCard}>
         <div className={styles.imageSection}>
-          <img src="./image.jpg" alt="3D Torus" className={styles.image} />
+          <img src={image} alt="image" className={styles.image} />
         </div>
 
         <div className={styles.formSection}>
@@ -75,7 +76,7 @@ export default function SignUp() {
 
           <footer className={styles.footer}>
             <Link to="/" className={styles.footerLogo}>
-              <img src="/logo.svg" alt="Logo" />
+              <img src={logo} alt="Logo" />
             </Link>
           </footer>
         </div>
