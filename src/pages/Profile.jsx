@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import ProfileEditForm from '../components/ProfileEditForm';
+import Header from '../components/Header';
 import styles from '../styles/Profile.module.css';
 
 const Profile = () => {
@@ -48,6 +49,7 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
+      <Header/>
       {profile && (
         <div className={styles.profileWrapper}>
           <h1 className={styles.profileTitle}>{profile?.name}'s Profile</h1>

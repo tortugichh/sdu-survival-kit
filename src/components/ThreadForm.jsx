@@ -66,7 +66,7 @@ const ThreadForm = ({ onThreadCreated }) => {
         setThread({ subject: '', content: '', topic: '' });
         handleClose();
 
-        // Call the callback function to update the list on the main page
+        
         if (onThreadCreated) {
           onThreadCreated(data);
         }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import ThreadListItem from '../components/ThreadListItem';
+import Card from '../components/Card';
 import ThreadForm from '../components/ThreadForm';
+import Header from '../components/Header';
 import styles from '../styles/Topic.module.css';
 
 const Topic = () => {
@@ -57,30 +58,38 @@ const Topic = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{topics[topicID - 1]} Threads</h1>
-        <ThreadForm />
-      </div>
-      <div className={styles.content}>
-        {threads.length > 0 ? (
-          <div className={styles.threads}>
-            {threads.map((thread, index) => (
-              <ThreadListItem key={index} thread={thread} />
-            ))}
-            {hasMore && (
-              <button className={styles.loadMoreButton} onClick={fetchData}>
-                Load More
-              </button>
-            )}
-            {!hasMore && (
-              <p className={styles.endMessage}>You have seen all the threads.</p>
-            )}
-          </div>
-        ) : (
-          <h4 className={styles.loading}>Loading...</h4>
-        )}
-      </div>
+    <Header/>
+    <div className={styles.header}>
+      <h1 className={styles.title}>{topics[topicID - 1]} Threads</h1>
+      <ThreadForm />
     </div>
+    <div className={styles.content}>
+      {threads.length > 0 ? (
+        <div className={styles.threads}>
+          {threads.map((thread, index) => (
+            <Card
+              key={index}
+              title={thread.subject}
+              subtitle={`tort - updated ${thread.updated_at || "N/A"} ago`}
+              content={thread.content || "No content available"}
+              link={`/threads/${thread.id}`}
+            />
+          ))}
+          {hasMore && (
+            <button className={styles.loadMoreButton} onClick={fetchData}>
+              Load More
+            </button>
+          )}
+          {!hasMore && (
+            <p className={styles.endMessage}>You have seen all the threads.</p>
+          )}
+        </div>
+      ) : (
+        <h4 className={styles.loading}>Loading...</h4>
+      )}
+    </div>
+  </div>
+
   );
 };
 

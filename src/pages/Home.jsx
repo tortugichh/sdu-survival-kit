@@ -1,9 +1,10 @@
+// pages/ThreadListPage.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import ThreadListItem from '../components/ThreadListItem';
 import ThreadForm from '../components/ThreadForm';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Header from '../components/Header';
+import Card from '../components/Card';
 import styles from '../styles/Home.module.css';
 
 const ThreadListPage = () => {
@@ -135,7 +136,13 @@ const ThreadListPage = () => {
             >
               {Array.isArray(threads) &&
                 threads.map((thread, index) => (
-                  <ThreadListItem key={index} thread={thread} />
+                  <Card
+                    key={index}
+                    title={thread.subject}
+                    subtitle={`tort - updated ${thread.updated_at} ago`}
+                    content={thread.content}
+                    link={`/threads/${thread.id}`}
+                  />
                 ))}
             </InfiniteScroll>
           </div>
@@ -143,18 +150,23 @@ const ThreadListPage = () => {
 
         <aside className={styles.rightSidebar}>
           <h2>Top Threads</h2>
-          {Array.isArray(topThreads) &&
+             <div className={styles.threadContainer}>
+            <InfiniteScroll
+              dataLength={threads.length}
+              next={fetchData}
+              hasMore={hasMore}
+            >
+            {Array.isArray(topThreads) &&
             topThreads.map((thread) => (
-              <div key={thread.id} className={styles.topThread}>
-                <Link to={`/threads/${thread.id}`} className={styles.threadLink}>
-                  <div className={styles.threadCard}>
-                    <h3>{thread.subject}</h3>
-                    <p className={styles.threadCreator}>{thread.creator}</p>
-                    <p className={styles.threadReplyCount}>Replies: {thread.replyCount}</p>
-                  </div>
-                </Link>
-              </div>
-            ))}
+              <Card
+                key={thread.id}
+                title={thread.subject}
+                subtitle={thread.creator}
+                link={`/threads/${thread.id}`}
+              />
+              ))}
+            </InfiniteScroll>
+          </div>
         </aside>
       </div>
     </div>

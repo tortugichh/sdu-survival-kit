@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import PostCardItem from '../components/PostCardItem';
 import ReplyForm from '../components/ReplyForm';
+import Header from '../components/Header';
 import styles from '../styles/Thread.module.css';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
@@ -149,6 +150,7 @@ const Thread = () => {
 
   return (
     <div className={styles.container}>
+      <Header/>
       {!user && (
         <div className={styles.loginPrompt}>
           <p style={{ color: 'red', border: '1px solid red', padding: '10px', borderRadius: '5px' }}>

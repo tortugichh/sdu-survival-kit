@@ -1,106 +1,64 @@
+/* Overall page container */
 .pageContainer {
   display: flex;
   flex-direction: row;
-  justify-content: center; 
-  align-items: center; 
-  min-height: 100vh; 
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   min-width: 100%;
-  background: transparent;
-
+  background: transparent !important;
 }
 
-.header{
+/* Header section */
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-}
-.leftheader{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  background-color: transparent !important;
 }
 
+/* Wrapper for main content and sidebars */
 .contentWrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 20px;
-  width: 100%; 
-  height: auto; 
-  max-width: 100%; 
+  width: 100%;
+  max-width: 100%;
   padding: 20px;
   box-sizing: border-box;
+  align-items: stretch; /* Ensure both sidebars and main content have the same height */
+  background-color: transparent !important;
 }
 
-.leftSidebar{
+/* Left sidebar (topics) */
+.leftSidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
   text-align: start;
-  color: white;
-}
-
-.rightSidebar{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  text-align: start;
-
-}
-
-
-
-.leftSidebar,
-.rightSidebar,
-.mainContent {
-  flex: 1; 
-  background-color: transparent;
-  border-radius: 10px;
+  color: white !important;
+  flex: 1; /* Allow it to take equal space */
+  background-color: transparent !important;
+  border: none !important;
   padding: 20px;
-  min-height: 500px; 
 }
 
-
-.mainContent{
-  background-color: transparent;
-  font-weight: 700;
-  color: white;
-}
-
-.rightSidebar{
-  background-color: transparent;
-  color: white;
-}
-
-
-
-.mainContent {
-  margin: 0 10px; 
-  text-align: center;
-}
-
-.threadContainer {
-  min-height: 500px; 
-  overflow-y: auto; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 20px; 
-}
-
-.topics{
+/* Container for each topic */
+.topics {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
+  margin-bottom: 15px; /* Adds spacing between each topic */
 }
-.topicLink{
-  color: white;
-  background-color:transparent;
+
+/* Styling for the topic links */
+.topicLink {
+  color: white !important;
+  background-color: transparent !important;
   text-decoration: none;
   font-family: 'Montserrat', sans-serif;
   font-size: 20px;
@@ -109,21 +67,116 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.topicLink:hover{
-  background-color: white;
-  color: #6a5acd;
+.topicLink:hover {
+  background-color: white !important;
+  color: #6a5acd !important;
 }
 
+/* Right sidebar (top threads) */
+.rightSidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1; /* Make sure it takes the same height as main content */
+  color: white !important;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: transparent !important;
+}
 
+.topThreadContainer {
+  flex: 1; /* Allow the container to grow to fill the height of the sidebar */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-between; /* Space out the cards evenly */
+  height: 100%; /* Ensure container takes full height */
+}
+
+/* Main content section (latest threads) */
+.mainContent {
+  flex: 3; /* Give more space to the main content compared to sidebars */
+  margin-right: 10px; /* Add some spacing to keep it visually separate */
+  text-align: center;
+  font-weight: 700;
+  color: white !important;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  padding: 20px;
+}
+
+/* Thread container to hold all threads */
+.threadContainer {
+  flex: 1;
+  min-height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 15px;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* Loader and end message styling */
+.loaderText,
+.endMessage {
+  background-color: transparent !important;
+  color: white !important;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+}
+
+/* Card styling */
+.card {
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex: 1; /* Allow the card to grow to fill its container */
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardTitle {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.cardSubtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.cardContent {
+  font-size: 16px;
+  color: #444;
+}
+
+/* Responsive styles for smaller screens */
 @media (max-width: 768px) {
   .contentWrapper {
-    flex-direction: column; 
+    flex-direction: column; /* Stack everything in a column on small screens */
   }
 
   .leftSidebar,
   .rightSidebar,
   .mainContent {
-    width: 100%; 
+    width: 100%;
     margin: 0;
   }
 }

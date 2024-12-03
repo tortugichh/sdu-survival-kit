@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import BookmarkThreadListItem from '../components/BookmarkThreadListItem';
 import AuthContext from '../context/AuthContext';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Header from '../components/Header';
 import styles from '../styles/Bookmark.module.css';
 import jwtDecode from 'jwt-decode';
 
@@ -92,6 +93,7 @@ const Bookmark = () => {
 
   return (
     <div className={styles.pageContainer}>
+      <Header/>
       {user ? (
         <div className={styles.container}>
           <h2 className={styles.header}>Bookmarked Threads</h2>
