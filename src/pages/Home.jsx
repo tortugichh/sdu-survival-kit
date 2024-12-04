@@ -1,4 +1,4 @@
-// pages/ThreadListPage.js
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ThreadForm from '../components/ThreadForm';
@@ -136,14 +136,18 @@ const ThreadListPage = () => {
               loader={<p className={styles.loaderText}>Loading...</p>}
               endMessage={<p className={styles.endMessage}>You have seen all the threads.</p>}
             >
+             
               {Array.isArray(threads) &&
                 threads.map((thread, index) => (
                   <Card
                     key={index}
                     title={thread.subject}
-                    subtitle={`tort - posted on ${thread.created}`}
+                    subtitle={`${thread?.creator} - posted on ${thread.created}`}
                     content={thread.content}
                     link={`/threads/${thread.id}`}
+                    upvotes={thread.upvotes?.length || 0} // передаем количество upvotes
+                    downvotes={thread.downvotes?.length || 0} // передаем количество downvotes
+                    threadId={thread.id} //
                   />
                 ))}
             </InfiniteScroll>

@@ -122,20 +122,29 @@ class ThreadVoteView(APIView):
         thread = get_object_or_404(Thread, pk=thread_id)
         user = request.user
 
+        # Логика для управления голосами
         if action == 'upvote':
             if thread.downvotes.filter(pk=user.pk).exists():
+                # Если пользователь уже голосовал против, удаляем этот голос
                 thread.downvotes.remove(user)
             if thread.upvotes.filter(pk=user.pk).exists():
+                # Если пользователь уже голосовал за, удаляем этот голос
                 thread.upvotes.remove(user)
             else:
+                # Добавляем голос "за"
                 thread.upvotes.add(user)
+
         elif action == 'downvote':
             if thread.upvotes.filter(pk=user.pk).exists():
+                # Если пользователь уже голосовал за, удаляем этот голос
                 thread.upvotes.remove(user)
             if thread.downvotes.filter(pk=user.pk).exists():
+                # Если пользователь уже голосовал против, удаляем этот голос
                 thread.downvotes.remove(user)
             else:
+                # Добавляем голос "против"
                 thread.downvotes.add(user)
+
         else:
             return Response({'error': 'Invalid action.'}, status=status.HTTP_400_BAD_REQUEST)
 

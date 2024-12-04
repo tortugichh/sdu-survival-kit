@@ -33,6 +33,25 @@
     color: #C8C8C8	;
     margin-bottom: 10px;
   }
+  .voteContainer {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .voteButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .voteButton:hover {
+    background-color: #0056b3;
+  }
+  
   
  
   

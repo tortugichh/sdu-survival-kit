@@ -157,14 +157,16 @@ const Thread = () => {
         </div>
       )}
       <Card
+        
         title={thread?.subject}
         content={thread?.content}
         subtitle={
           <>Posted by <Link to={`/profile/${thread?.creator_id}`}>{thread?.creator}</Link> on {thread?.created}</>
         }
-        link={`/profile/${thread?.creator_id}`}
       >
-        {user && (
+       
+      </Card>
+      {user && (
           <button
             className={`${styles.bookmarkButton} ${pin ? styles.pinned : ''}`}
             onClick={handlePinToggle}
@@ -172,7 +174,6 @@ const Thread = () => {
             {pin ? 'Unpin' : 'Pin'}
           </button>
         )}
-      </Card>
       <div className={styles.posts}>
         {posts.length > 0 ? (
           posts.map((post, index) => (
