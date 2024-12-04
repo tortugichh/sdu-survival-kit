@@ -148,8 +148,14 @@ class ThreadVoteView(APIView):
         else:
             return Response({'error': 'Invalid action.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        user_vote = None
+        if thread.upvotes.filter(pk=user.pk).exists():
+            user_vote = 'upvote'
+        elif thread.downvotes.filter(pk=user.pk).exists():
+            user_vote = 'downvote'
+
         thread.save()
-        return Response({'vote_score': thread.vote_score()}, status=status.HTTP_200_OK)
+        return Response({'vote_score': thread.vote_score(), 'user_vote': user_vote}, status=status.HTTP_200_OK)
 
 class TopThreadsView(generics.ListAPIView):
     queryset = Thread.objects.order_by('-reply_count')[:5]
