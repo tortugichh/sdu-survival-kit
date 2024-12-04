@@ -4,10 +4,10 @@ import AuthContext from '../context/AuthContext';
 import PostCardItem from '../components/PostCardItem';
 import ReplyForm from '../components/ReplyForm';
 import Header from '../components/Header';
+import Card from '../components/Card'; // Importing Card component
 import styles from '../styles/Thread.module.css';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
-
 
 const Thread = () => {
   const { user, getAuthHeaders, updateToken, authTokens } = useContext(AuthContext);
@@ -61,8 +61,6 @@ const Thread = () => {
     const fetchPosts = async () => {
       try {
         let headers = {};
-
-        // If user is logged in, add Authorization header
         if (user) {
           if (isTokenExpired(authTokens.access)) {
             await updateToken();
@@ -126,7 +124,7 @@ const Thread = () => {
       const response = await fetch(`/api/pin/`, {
         method: 'POST',
         headers: {
-          ...getAuthHeaders(), // Use the helper function and add CSRF token
+          ...getAuthHeaders(),
           'X-CSRFToken': csrfToken,
         },
         body: JSON.stringify({
@@ -150,7 +148,7 @@ const Thread = () => {
 
   return (
     <div className={styles.container}>
-      <Header/>
+      <Header />
       {!user && (
         <div className={styles.loginPrompt}>
           <p style={{ color: 'red', border: '1px solid red', padding: '10px', borderRadius: '5px' }}>
@@ -158,29 +156,23 @@ const Thread = () => {
           </p>
         </div>
       )}
-      <div className={styles.card}>
-        <div className={styles.cardHeader}>
-          <h2 className={styles.title}>{thread?.subject}</h2>
-          {user && (
-            <button
-              className={`${styles.bookmarkButton} ${pin ? styles.pinned : ''}`}
-              onClick={handlePinToggle}
-            >
-              {pin ? 'Unpin' : 'Pin'}
-            </button>
-          )}
-        </div>
-        <div className={styles.content}>
-          <p className={styles.text}>{thread?.content}</p>
-        </div>
-        <div className={styles.meta}>
-          <Link to={`/profile/${thread?.creator_id}`} className={styles.creator}>
-            {thread?.creator}
-          </Link>
-          {' '}posted on {thread?.created}
-        </div>
-      </div>
-
+      <Card
+        title={thread?.subject}
+        content={thread?.content}
+        subtitle={
+          <>Posted by <Link to={`/profile/${thread?.creator_id}`}>{thread?.creator}</Link> on {thread?.created}</>
+        }
+        link={`/profile/${thread?.creator_id}`}
+      >
+        {user && (
+          <button
+            className={`${styles.bookmarkButton} ${pin ? styles.pinned : ''}`}
+            onClick={handlePinToggle}
+          >
+            {pin ? 'Unpin' : 'Pin'}
+          </button>
+        )}
+      </Card>
       <div className={styles.posts}>
         {posts.length > 0 ? (
           posts.map((post, index) => (

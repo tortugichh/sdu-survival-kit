@@ -30,7 +30,7 @@ const ResAppBar = () => {
         let userID = user['user_id'];
 
         try {
-          // Ensure token is updated if expired
+      
           if (authTokens && isTokenExpired(authTokens.access)) {
             await updateToken();
           }
@@ -114,11 +114,13 @@ const ResAppBar = () => {
                 onMouseLeave={() => setUserDropdownOpen(false)}
               >
                 <button className={styles.avatarButton}>
+                  <h2>{profile?.name}</h2>
                   <img
                     src={profile?.avatar || '/default-avatar.png'}
                     alt="User Avatar"
                     className={styles.avatar}
                   />
+                  
                 </button>
                 <div
                   className={`${styles.dropdownContent} ${
@@ -134,7 +136,7 @@ const ResAppBar = () => {
                   <Link
                     to="#"
                     onClick={(e) => {
-                      e.preventDefault(); // Чтобы ссылка не перезагружала страницу
+                      e.preventDefault(); 
                       logoutUser();
                     }}
                     className={styles.navLink}

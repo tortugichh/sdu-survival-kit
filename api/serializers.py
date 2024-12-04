@@ -49,6 +49,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ThreadSerializer(serializers.ModelSerializer):
     creator = serializers.ReadOnlyField(source='creator.username')
     creator_id = serializers.IntegerField(source='creator.id', read_only=True)
+    created = serializers.DateTimeField(format="%d-%m-%Y", read_only=True)
     upvotes = serializers.IntegerField(source='upvotes.count', read_only=True)
     downvotes = serializers.IntegerField(source='downvotes.count', read_only=True)
     vote_score = serializers.SerializerMethodField()
@@ -65,7 +66,7 @@ class ThreadSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     creator_id = serializers.IntegerField(source='creator.id', read_only=True)
     creator = serializers.CharField(source='creator.username', read_only=True)
-    created = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S", read_only=True)
+    created = serializers.DateTimeField(format="%d-%m-%Y", read_only=True)
     updated = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S", read_only=True)
 
     class Meta:

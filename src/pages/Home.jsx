@@ -103,6 +103,8 @@ const ThreadListPage = () => {
     setThreads((prevThreads) => [newThread, ...prevThreads]);
   };
 
+  
+
   return (
     <div className={styles.pageContainer}>
       <Header />
@@ -139,7 +141,7 @@ const ThreadListPage = () => {
                   <Card
                     key={index}
                     title={thread.subject}
-                    subtitle={`tort - updated ${thread.updated_at} ago`}
+                    subtitle={`tort - posted on ${thread.created}`}
                     content={thread.content}
                     link={`/threads/${thread.id}`}
                   />

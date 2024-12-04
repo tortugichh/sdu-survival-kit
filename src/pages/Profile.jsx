@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import styles from '../styles/Profile.module.css';
 
 const Profile = () => {
-  const { user, authTokens } = useContext(AuthContext);  // Import authTokens from the AuthContext
+  const { user, authTokens } = useContext(AuthContext);  
 
   const params = useParams();
   const profileID = params.id;
@@ -15,7 +15,7 @@ const Profile = () => {
 
   const [profile, setProfile] = useState();
 
-  // Function to handle the profile update and update the local state
+  
   const handleProfileUpdate = (updatedProfile) => {
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -28,7 +28,7 @@ const Profile = () => {
       try {
         const response = await fetch(`/api/profile/${profileID}/`, {
           headers: {
-            'Authorization': `Bearer ${authTokens?.access}`,  // Use the authTokens here
+            'Authorization': `Bearer ${authTokens?.access}`,  
           },
         });
         if (response.ok) {

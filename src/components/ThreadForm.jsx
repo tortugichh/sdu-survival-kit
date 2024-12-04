@@ -47,7 +47,7 @@ const ThreadForm = ({ onThreadCreated }) => {
       const csrfToken = Cookies.get('csrftoken');
 
       if (!csrfToken) {
-        console.error('CSRF-токен отсутствует.');
+        alert('CSRF token is missing. Please try refreshing the page.');
         return;
       }
 
@@ -66,15 +66,18 @@ const ThreadForm = ({ onThreadCreated }) => {
         setThread({ subject: '', content: '', topic: '' });
         handleClose();
 
-        
+      
+
         if (onThreadCreated) {
           onThreadCreated(data);
         }
       } else {
         const errorText = await response.text();
+        alert(`Failed to create thread. Error: ${errorText}`);
         console.error('Failed to create thread:', errorText);
       }
     } catch (error) {
+      alert(`An error occurred: ${error.message}`);
       console.error('Error creating thread:', error);
     }
   };

@@ -1,4 +1,3 @@
-
 .appBar {
   width: 100%;
   position: fixed;
@@ -13,8 +12,7 @@
 .container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
+  align-items: flex-start;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -155,6 +153,11 @@
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: white;
+  gap: 10px;
 }
 
 .avatar {

@@ -70,7 +70,7 @@ const Topic = () => {
             <Card
               key={index}
               title={thread.subject}
-              subtitle={`tort - updated ${thread.updated_at || "N/A"} ago`}
+              subtitle={`tort - posted on ${thread.created || "N/A"}`}
               content={thread.content || "No content available"}
               link={`/threads/${thread.id}`}
             />

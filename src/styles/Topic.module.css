@@ -1,4 +1,3 @@
-
 .container {
   margin-top: 100px;
   padding: 20px;
@@ -29,7 +28,7 @@
 .threads {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Add spacing between cards */
+  gap: 20px; 
 }
 
 
