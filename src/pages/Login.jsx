@@ -4,18 +4,16 @@ import styles from '../styles/Login.module.css';
 import { Link } from 'react-router-dom';
 import image from '../assets/image.jpg';
 import logo from '../assets/logo.svg';
+
 const SignIn = () => {
   const { loginUser } = useContext(AuthContext);
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.signupCard}>
-      
         <div className={styles.imageSection}>
           <img src={image} alt="image" className={styles.image} />
         </div>
-
-       
         <div className={styles.formSection}>
           <h2 className={styles.title}>Log in</h2>
           <p className={styles.subTitle}>
@@ -36,15 +34,17 @@ const SignIn = () => {
               required
               className={styles.input}
             />
+            <div className={styles.forgotPasswordContainer}>
+              <Link to="/passwordreset" className={styles.forgotPasswordLink}>
+                Forgot password?
+              </Link>
+            </div>
             <button type="submit" className={styles.button}>Log in</button>
-           
           </form>
           <footer className={styles.footer}>
-          <Link to="/" className={styles.footerLogo}>
-            <img src={logo} alt="Logo" />
-
-          </Link>
-           
+            <Link to="/" className={styles.footerLogo}>
+              <img src={logo} alt="Logo" />
+            </Link>
           </footer>
         </div>
       </div>

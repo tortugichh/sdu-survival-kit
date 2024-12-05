@@ -198,23 +198,28 @@ class PasswordResetAPIView(APIView):
 
     def post(self, request):
         email = request.data.get('email')
-        user = get_object_or_404(User, email=email)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
+        users = User.objects.filter(email=email)
+        if not users.exists():
+            return Response({"error": "User with this email does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
-        reset_link = f"http://localhost:3000/reset-password/{uid}/{token}"
-        message = render_to_string('email/password_reset_email.html', {
-            'user': user,
-            'reset_link': reset_link,
-        })
+        # Send password reset link to each user with the given email
+        for user in users:
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
 
-        send_mail(
-            'Password Reset Request',
-            message,
-            env('EMAIL_HOST_USER'),
-            [user.email],
-            fail_silently=False,
-        )
+            reset_link = f"http://127.0.0.1:8000/reset-password/{uid}/{token}"
+            message = render_to_string('email/password_reset_email.html', {
+                'user': user,
+                'reset_link': reset_link,
+            })
+
+            send_mail(
+                'Password Reset Request',
+                message,
+                env('EMAIL_HOST_USER'),
+                [user.email],
+                fail_silently=False,
+            )
 
         return Response({"message": "Password reset link sent to your email."}, status=status.HTTP_200_OK)
 
