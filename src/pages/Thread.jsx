@@ -163,6 +163,7 @@ const Thread = () => {
         subtitle={
           <>Posted by <Link to={`/profile/${thread?.creator_id}`}>{thread?.creator}</Link> on {thread?.created}</>
         }
+        showVotes={false} 
       >
        
       </Card>

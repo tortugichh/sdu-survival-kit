@@ -207,7 +207,7 @@ class PasswordResetAPIView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
 
-            reset_link = f"http://127.0.0.1:8000/reset-password/{uid}/{token}"
+            reset_link = f"http://127.0.0.1:8000/passwordconfirm/{uid}/{token}"
             message = render_to_string('email/password_reset_email.html', {
                 'user': user,
                 'reset_link': reset_link,

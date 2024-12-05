@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ThreadForm from '../components/ThreadForm';
@@ -103,8 +102,6 @@ const ThreadListPage = () => {
     setThreads((prevThreads) => [newThread, ...prevThreads]);
   };
 
-  
-
   return (
     <div className={styles.pageContainer}>
       <Header />
@@ -136,7 +133,6 @@ const ThreadListPage = () => {
               loader={<p className={styles.loaderText}>Loading...</p>}
               endMessage={<p className={styles.endMessage}>You have seen all the threads.</p>}
             >
-             
               {Array.isArray(threads) &&
                 threads.map((thread, index) => (
                   <Card
@@ -145,9 +141,9 @@ const ThreadListPage = () => {
                     subtitle={`${thread?.creator} - posted on ${thread.created}`}
                     content={thread.content}
                     link={`/threads/${thread.id}`}
-                    upvotes={thread.upvotes?.length || 0} // передаем количество upvotes
-                    downvotes={thread.downvotes?.length || 0} // передаем количество downvotes
-                    threadId={thread.id} //
+                    upvotes={thread.upvotes?.length || 0}
+                    downvotes={thread.downvotes?.length || 0}
+                    threadId={thread.id}
                   />
                 ))}
             </InfiniteScroll>
@@ -156,22 +152,19 @@ const ThreadListPage = () => {
 
         <aside className={styles.rightSidebar}>
           <h2>Top Threads</h2>
-             <div className={styles.threadContainer}>
-            <InfiniteScroll
-              dataLength={threads.length}
-              next={fetchData}
-              hasMore={hasMore}
-            >
+          <div className={styles.threadContainer}>
             {Array.isArray(topThreads) &&
-            topThreads.map((thread) => (
-              <Card
-                key={thread.id}
-                title={thread.subject}
-                subtitle={thread.creator}
-                link={`/threads/${thread.id}`}
-              />
+              topThreads.map((thread) => (
+                <Card
+                  key={thread.id}
+                  title={thread.subject}
+                  subtitle={thread.creator}
+                  link={`/threads/${thread.id}`}
+                  upvoteCount={thread.upvotes?.length || 0} // Display upvote count
+                  downvoteCount={thread.downvotes?.length || 0} // Display downvote count
+                  showVotes={false} // Hide upvote/downvote buttons
+                />
               ))}
-            </InfiniteScroll>
           </div>
         </aside>
       </div>

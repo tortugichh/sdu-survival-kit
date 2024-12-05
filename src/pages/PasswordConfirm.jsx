@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from '../styles/PasswordReset.module.css';
 import Cookies from 'js-cookie';
 
-const PasswordReset = () => {
-  const [email, setEmail] = useState('');
+const PasswordConfirm = () => {
+  const { uid, token } = useParams(); // Get uid and token from the URL
+  const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -12,25 +13,25 @@ const PasswordReset = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
+    // Получение CSRF токена
     const csrfToken = Cookies.get('csrftoken');
 
     try {
-      const response = await fetch('/api/password_reset/', {
+      const response = await fetch('/api/password_reset_confirm/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken, // Вставляем CSRF токен
         },
-        body: JSON.stringify({ email }), // Передаем email в теле запроса
+        body: JSON.stringify({ uid, token, new_password: newPassword }),
       });
 
       if (response.ok) {
-        setMessage('Password reset link has been sent to your email.');
-        setTimeout(() => navigate('/'), 1000); 
+        setMessage('Password reset successful. You will be redirected to login.');
+        setTimeout(() => navigate('/login'), 5000); // Redirect to login after 5 seconds
       } else {
         const data = await response.json();
-        setError(data.error || 'Failed to send password reset link.');
+        setError(data.error || 'Failed to reset password.');
       }
     } catch (err) {
       setError('Something went wrong. Please try again.');
@@ -42,19 +43,19 @@ const PasswordReset = () => {
       <div className={styles.resetCard}>
         <h2 className={styles.title}>Reset Your Password</h2>
         <p className={styles.subTitle}>
-          Enter your email address below and we'll send you a link to reset your password.
+          Enter your new password below.
         </p>
         <form className={styles.form} onSubmit={handleSubmit}>
           <input
-            type="email"
-            name="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="password"
+            name="newPassword"
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
             required
             className={styles.input}
           />
-          <button type="submit" className={styles.button}>Send Reset Link</button>
+          <button type="submit" className={styles.button}>Reset Password</button>
         </form>
         {message && <p className={styles.successMessage}>{message}</p>}
         {error && <p className={styles.errorMessage}>{error}</p>}
@@ -63,4 +64,4 @@ const PasswordReset = () => {
   );
 };
 
-export default PasswordReset;
+export default PasswordConfirm;

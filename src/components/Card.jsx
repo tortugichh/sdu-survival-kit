@@ -3,19 +3,30 @@ import Cookies from 'js-cookie';
 import styles from '../styles/Card.module.css';
 import AuthContext from '../context/AuthContext';
 
-const Card = ({ title, content, subtitle, link, buttonText, onButtonClick, buttonClassName, threadId }) => {
+const Card = ({
+  title,
+  content,
+  subtitle,
+  link,
+  buttonText,
+  onButtonClick,
+  buttonClassName,
+  threadId,
+  showVotes = true,
+  upvoteCount = null, // Added prop to optionally display upvotes count
+  downvoteCount = null // Added prop to optionally display downvotes count
+}) => {
   const { authTokens } = useContext(AuthContext);
   const csrfToken = Cookies.get('csrftoken');
 
   const [voteCount, setVoteCount] = useState({
-    upvotes: 0,
-    downvotes: 0,
+    upvotes: upvoteCount || 0,
+    downvotes: downvoteCount || 0,
   });
   const [userVote, setUserVote] = useState(null);
 
-  // Fetch the thread data on component mount
   const fetchThreadData = () => {
-    if (threadId) {
+    if (threadId && showVotes) {
       fetch(`/api/threads/${threadId}/`, {
         method: 'GET',
         headers: {
@@ -49,7 +60,6 @@ const Card = ({ title, content, subtitle, link, buttonText, onButtonClick, butto
       return;
     }
     try {
-      // Optimistically update UI before fetching
       setVoteCount((prev) => ({
         ...prev,
         upvotes: userVote === 'upvote' ? prev.upvotes - 1 : prev.upvotes + 1,
@@ -141,22 +151,29 @@ const Card = ({ title, content, subtitle, link, buttonText, onButtonClick, butto
           {buttonText}
         </button>
       )}
-      <div className={styles.voteContainer}>
-        <button
-          className={`${styles.voteButton} ${userVote === 'upvote' ? styles.activeVote : ''}`}
-          onClick={handleUpvote}
-          disabled={userVote === 'upvote'}
-        >
-          Upvote ({voteCount.upvotes})
-        </button>
-        <button
-          className={`${styles.voteButton} ${userVote === 'downvote' ? styles.activeVote : ''}`}
-          onClick={handleDownvote}
-          disabled={userVote === 'downvote'}
-        >
-          Downvote ({voteCount.downvotes})
-        </button>
-      </div>
+      {showVotes ? (
+        <div className={styles.voteContainer}>
+          <button
+            className={`${styles.voteButton} ${userVote === 'upvote' ? styles.activeVote : ''}`}
+            onClick={handleUpvote}
+            disabled={userVote === 'upvote'}
+          >
+            Upvote ({voteCount.upvotes})
+          </button>
+          <button
+            className={`${styles.voteButton} ${userVote === 'downvote' ? styles.activeVote : ''}`}
+            onClick={handleDownvote}
+            disabled={userVote === 'downvote'}
+          >
+            Downvote ({voteCount.downvotes})
+          </button>
+        </div>
+      ) : (
+        <div className={styles.voteCount}>
+          <p>Upvotes: {voteCount.upvotes}</p>
+          <p>Downvotes: {voteCount.downvotes}</p>
+        </div>
+      )}
     </div>
   );
 };

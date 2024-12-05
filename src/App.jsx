@@ -7,6 +7,7 @@ import Thread from './pages/Thread';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import PasswordReset from './pages/PasswordReset';
+import PasswordConfirm from './pages/PasswordConfirm';
 import PrivateRoute from './utils/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 import Bookmark from './pages/Bookmark';
@@ -28,6 +29,7 @@ const App = () => {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/passwordreset" element={<PasswordReset/>}/>
+                <Route path="/passwordconfirm/:uid/:token" element={<PasswordConfirm />} />
                 <Route path="/threads/:id" element={<Thread />} />
                 <Route path="/topic/:id" element={<Topic />} />
                 <Route path="/profile/:id" element={<Profile />} />
