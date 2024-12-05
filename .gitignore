@@ -1,0 +1,4 @@
+.idea/
+.env
+/api/__pycache__/
+/myforum/__pycache__/
