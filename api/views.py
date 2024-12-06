@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
@@ -12,7 +13,8 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from .models import Thread, Post, Profile, Pin
-from .serializers import ThreadSerializer, PostSerializer, MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer
+from .serializers import ThreadSerializer, PostSerializer, MyTokenObtainPairSerializer, RegisterSerializer, \
+    PinSerializer, ProfileSerializer, BookmarkSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 import environ
@@ -192,33 +194,38 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 class PasswordResetAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
 
     def post(self, request):
         email = request.data.get('email')
-        user = get_object_or_404(User, email=email)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
+        users = User.objects.filter(email=email)
+        if not users.exists():
+            return Response({"error": "User with this email does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
-        reset_link = f"http://localhost:3000/reset-password/{uid}/{token}"
-        message = render_to_string('email/password_reset_email.html', {
-            'user': user,
-            'reset_link': reset_link,
-        })
+        # Send password reset link to each user with the given email
+        for user in users:
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
 
-        send_mail(
-            'Password Reset Request',
-            message,
-            env('EMAIL_HOST_USER'),
-            [user.email],
-            fail_silently=False,
-        )
+            reset_link = f"https://sdu-survival-kit.site/passwordconfirm/{uid}/{token}"
+            message = render_to_string('email/password_reset_email.html', {
+                'user': user,
+                'reset_link': reset_link,
+            })
+
+            send_mail(
+                'Password Reset Request',
+                message,
+                env('EMAIL_HOST_USER'),
+                [user.email],
+                fail_silently=False,
+            )
 
         return Response({"message": "Password reset link sent to your email."}, status=status.HTTP_200_OK)
 
 
 class PasswordResetConfirmAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
 
     def post(self, request):
         uid = request.data.get('uid')
