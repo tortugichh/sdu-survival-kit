@@ -158,7 +158,7 @@ const ThreadListPage = () => {
                 <Card
                   key={thread.id}
                   title={thread.subject}
-                  subtitle={thread.creator}
+                  subtitle={`${thread?.creator} - posted on ${thread.created}`}
                   link={`/threads/${thread.id}`}
                   showVotes={false} 
                 />
