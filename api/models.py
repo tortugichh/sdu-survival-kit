@@ -4,6 +4,8 @@ from typing import Any
 
 
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
+
     groups = models.ManyToManyField(
         Group,
         related_name='user_groups_api',
