@@ -1,62 +1,58 @@
 .appBar {
   width: 100%;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   background-color: transparent;
   z-index: 1000;
   box-sizing: border-box;
+  padding: 10px 15px;
 }
-
 
 .container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
 }
-.toolbar{
+
+.toolbar {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  
-  
 }
 
 .logo {
   display: flex;
   align-items: center;
-  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
   color: white;
 }
 
 .logo img {
-  height: 30px;
-  margin-right: 10px;
+  height: 35px; 
+  margin-right: 5px; 
 }
-
 
 .navMenu {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px; 
 }
 
 .navLink {
   color: black;
   text-decoration: none;
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 16px;
+  font-size: 14px; 
   transition: color 0.3s ease-in-out;
 }
 
 .navLink:hover {
   color: #f0f0f0;
 }
-
 
 .dropdown {
   position: relative;
@@ -66,15 +62,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  background: #1E64FA;
-  padding: 9px 30px;
-  border-radius: 10px;
-  color: white;
-  font-family: 'Nunito sans', sans-serif;
-  font-size: 16px;
-  border: none;
   cursor: pointer;
+  border: none;
+  background: transparent;
+  color: white;
+  height: 30px;
+  width: 30px;
+  font-size: 16px; 
 }
 
 .dropdownContent {
@@ -93,8 +87,8 @@
   display: block;
   color: #333;
   text-decoration: none;
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 8px 15px;
+  font-size: 12px; 
   font-family: 'Montserrat', sans-serif;
   transition: background-color 0.2s ease;
 }
@@ -108,11 +102,10 @@
   display: block;
 }
 
-
 .authLinks {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
+  gap: 10px; 
 }
 
 .authLink {
@@ -120,9 +113,9 @@
   background-color: #1E64FA;
   text-decoration: none;
   font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  padding: 8px 20px;
-  border-radius: 10px;
+  font-size: 15px; 
+  padding: 8px 20px; 
+  border-radius: 8px; 
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -132,21 +125,19 @@
 }
 
 .menuButton {
-  display: none;
+  display: block;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   color: white;
   cursor: pointer;
 }
-
 
 .userSection {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  
 }
 
 .avatarButton {
@@ -157,40 +148,62 @@
   justify-content: space-between;
   align-items: flex-start;
   color: white;
-  gap: 10px;
+  gap: 5px; 
 }
 
 .avatar {
-  width: 40px;
+  width: 40px; 
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
+.profile{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+p{
+  font-size: 16px;
+}
 
-/* Мобильное меню */
-@media (max-width: 768px) {
-  .menuButton {
-    display: block;
+@media (max-width: 320px) {
+  .appBar {
+    padding: 5px 10px; 
   }
 
   .navMenu {
-    display: none;
-    flex-direction: column;
-    background: #6a5acd;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    right: 0;
-    padding: 10px 0;
-    z-index: 1;
-  }
-
-  .navMenu.open {
-    display: flex;
+    flex-direction: column; 
+    gap: 5px; 
   }
 
   .navLink {
-    margin: 10px 0;
-    text-align: center;
+    font-size: 12px; 
+  }
+
+  .authLinks {
+    gap: 5px; 
+  }
+
+  .authLink {
+    font-size: 10px; 
+    padding: 4px 8px; 
+  }
+
+  .menuButton {
+    font-size: 18px; 
+  }
+
+  .dropdownContent a {
+    padding: 6px 10px; 
+    font-size: 10px; 
+  }
+
+  .avatar {
+    width: 25px; 
+    height: 25px;
+  }
+
+  .logo img {
+    height: 20px; 
   }
 }

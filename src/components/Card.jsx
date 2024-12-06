@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import styles from '../styles/Card.module.css';
+import styles from '../styles_components/Card.module.css';
 import AuthContext from '../context/AuthContext';
 
 const Card = ({
@@ -13,8 +13,8 @@ const Card = ({
   buttonClassName,
   threadId,
   showVotes = true,
-  upvoteCount = null, // Added prop to optionally display upvotes count
-  downvoteCount = null // Added prop to optionally display downvotes count
+  upvoteCount = null, 
+  downvoteCount = null 
 }) => {
   const { authTokens } = useContext(AuthContext);
   const csrfToken = Cookies.get('csrftoken');
@@ -78,7 +78,7 @@ const Card = ({
 
       if (!response.ok) {
         console.error('Failed to upvote');
-        // Roll back optimistic UI update if the request fails
+        
         setVoteCount((prev) => ({
           ...prev,
           upvotes: userVote === 'upvote' ? prev.upvotes + 1 : prev.upvotes - 1,
@@ -86,7 +86,7 @@ const Card = ({
         }));
         setUserVote(userVote);
       } else {
-        // Fetch updated data after successful upvote
+
         fetchThreadData();
       }
     } catch (error) {
@@ -100,7 +100,6 @@ const Card = ({
       return;
     }
     try {
-      // Optimistically update UI before fetching
       setVoteCount((prev) => ({
         ...prev,
         upvotes: userVote === 'upvote' ? prev.upvotes - 1 : prev.upvotes,
@@ -119,7 +118,6 @@ const Card = ({
 
       if (!response.ok) {
         console.error('Failed to downvote');
-        // Roll back optimistic UI update if the request fails
         setVoteCount((prev) => ({
           ...prev,
           upvotes: userVote === 'upvote' ? prev.upvotes + 1 : prev.upvotes,
@@ -127,7 +125,6 @@ const Card = ({
         }));
         setUserVote(userVote);
       } else {
-        // Fetch updated data after successful downvote
         fetchThreadData();
       }
     } catch (error) {
@@ -144,8 +141,9 @@ const Card = ({
       ) : (
         <h3 className={styles.cardTitle}>{title}</h3>
       )}
-      {subtitle && <p className={styles.cardSubtitle}>{subtitle}</p>}
       {content && <p className={styles.cardContent}>{content}</p>}
+      {subtitle && <p className={styles.cardSubtitle}>{subtitle}</p>}
+      
       {buttonText && (
         <button className={buttonClassName || styles.defaultButton} onClick={onButtonClick}>
           {buttonText}
@@ -158,20 +156,19 @@ const Card = ({
             onClick={handleUpvote}
             disabled={userVote === 'upvote'}
           >
-            Upvote ({voteCount.upvotes})
+            Upvote: {voteCount.upvotes}
           </button>
           <button
             className={`${styles.voteButton} ${userVote === 'downvote' ? styles.activeVote : ''}`}
             onClick={handleDownvote}
             disabled={userVote === 'downvote'}
           >
-            Downvote ({voteCount.downvotes})
+            Downvote: {voteCount.downvotes}
           </button>
         </div>
       ) : (
         <div className={styles.voteCount}>
-          <p>Upvotes: {voteCount.upvotes}</p>
-          <p>Downvotes: {voteCount.downvotes}</p>
+          
         </div>
       )}
     </div>

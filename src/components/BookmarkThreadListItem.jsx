@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import AuthContext from '../context/AuthContext';
-import styles from '../styles/BookmarkThreadListItem.module.css';
+import styles from '../styles_components/BookmarkThreadListItem.module.css';
 import Cookies from 'js-cookie';
 
 const BookmarkThreadListItem = ({ thread }) => {

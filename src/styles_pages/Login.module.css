@@ -109,3 +109,12 @@
   font-size: 14px;
   color: #ffffff;
 }
+@media (max-width: 768px) {
+  .imageSection {
+    display: none;
+  }
+  .input {
+    width: 90%;
+    
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import ThreadListItem from '../components/ThreadListItem';
-import styles from './Test.module.css';
+import styles from '../styles_pages/Test.module.css';
 const Test = () => {
   const [threads, setThreads] = useState([]);
   const [hasMore, setHasMore] = useState(true);

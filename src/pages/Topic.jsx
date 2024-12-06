@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Card from '../components/Card';
 import ThreadForm from '../components/ThreadForm';
 import Header from '../components/Header';
-import styles from '../styles/Topic.module.css';
+import styles from '../styles_pages/Topic.module.css';
 
 const Topic = () => {
   const params = useParams();
@@ -24,6 +24,7 @@ const Topic = () => {
   const [page, setPage] = useState(2);
   const [hasMore, setHasMore] = useState(true);
 
+  // Fetch initial threads
   useEffect(() => {
     const getThreads = async () => {
       const response = await fetch(`/api/threads/topic/${topicID}?page=1`);
@@ -36,6 +37,7 @@ const Topic = () => {
     getThreads();
   }, [params, topicID]);
 
+  // Fetch additional threads
   const getMoreThreads = async () => {
     try {
       const response = await fetch(`/api/threads/topic/${topicID}?page=${page}`);
@@ -56,40 +58,44 @@ const Topic = () => {
     setPage(page + 1);
   };
 
+  // Add a new thread to the list dynamically
+  const handleThreadCreated = (newThread) => {
+    setThreads((prevThreads) => [newThread, ...prevThreads]);
+  };
+
   return (
     <div className={styles.container}>
-    <Header/>
-    <div className={styles.header}>
-      <h1 className={styles.title}>{topics[topicID - 1]} Threads</h1>
-      <ThreadForm />
+      <Header />
+      <div className={styles.header}>
+        <h1 className={styles.title}>{topics[topicID - 1]} Threads</h1>
+        <ThreadForm onThreadCreated={handleThreadCreated} />
+      </div>
+      <div className={styles.content}>
+        {threads.length > 0 ? (
+          <div className={styles.threads}>
+            {threads.map((thread, index) => (
+              <Card
+                key={index}
+                title={thread.subject}
+                subtitle={`tort - posted on ${thread.created || 'N/A'}`}
+                content={thread.content || 'No content available'}
+                link={`/threads/${thread.id}`}
+              />
+            ))}
+            {hasMore && (
+              <button className={styles.loadMoreButton} onClick={fetchData}>
+                Load More
+              </button>
+            )}
+            {!hasMore && (
+              <p className={styles.endMessage}>You have seen all the threads.</p>
+            )}
+          </div>
+        ) : (
+          <h4 className={styles.loading}>Loading...</h4>
+        )}
+      </div>
     </div>
-    <div className={styles.content}>
-      {threads.length > 0 ? (
-        <div className={styles.threads}>
-          {threads.map((thread, index) => (
-            <Card
-              key={index}
-              title={thread.subject}
-              subtitle={`tort - posted on ${thread.created || "N/A"}`}
-              content={thread.content || "No content available"}
-              link={`/threads/${thread.id}`}
-            />
-          ))}
-          {hasMore && (
-            <button className={styles.loadMoreButton} onClick={fetchData}>
-              Load More
-            </button>
-          )}
-          {!hasMore && (
-            <p className={styles.endMessage}>You have seen all the threads.</p>
-          )}
-        </div>
-      ) : (
-        <h4 className={styles.loading}>Loading...</h4>
-      )}
-    </div>
-  </div>
-
   );
 };
 

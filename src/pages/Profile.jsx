@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import ProfileEditForm from '../components/ProfileEditForm';
 import Header from '../components/Header';
-import styles from '../styles/Profile.module.css';
+import styles from '../styles_pages/Profile.module.css';
 
 const Profile = () => {
   const { user, authTokens } = useContext(AuthContext);  

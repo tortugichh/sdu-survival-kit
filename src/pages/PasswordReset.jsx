@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from '../styles/PasswordReset.module.css';
+import styles from '../styles_pages/PasswordReset.module.css';
 import Cookies from 'js-cookie';
+import Header from '../components/Header';
 
 const PasswordReset = () => {
   const [email, setEmail] = useState('');
@@ -39,6 +40,7 @@ const PasswordReset = () => {
 
   return (
     <div className={styles.pageContainer}>
+      <Header/>
       <div className={styles.resetCard}>
         <h2 className={styles.title}>Reset Your Password</h2>
         <p className={styles.subTitle}>

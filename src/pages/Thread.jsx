@@ -5,7 +5,7 @@ import PostCardItem from '../components/PostCardItem';
 import ReplyForm from '../components/ReplyForm';
 import Header from '../components/Header';
 import Card from '../components/Card'; // Importing Card component
-import styles from '../styles/Thread.module.css';
+import styles from '../styles_pages/Thread.module.css';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 
@@ -156,6 +156,7 @@ const Thread = () => {
           </p>
         </div>
       )}
+      {user && <ReplyForm thread={thread} />}
       <Card
         
         title={thread?.subject}
@@ -185,7 +186,7 @@ const Thread = () => {
         )}
       </div>
 
-      {user && <ReplyForm thread={thread} />}
+      
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import styles from '../styles/ThreadForm.module.css';
+import styles from '../styles_components/ThreadForm.module.css';
 import Cookies from 'js-cookie';
 
 const ThreadForm = ({ onThreadCreated }) => {

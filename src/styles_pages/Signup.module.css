@@ -118,3 +118,81 @@
   width: 100px;
   height: 170px;
 }
+
+
+
+@media (max-width: 768px) {
+  .signupCard {
+    flex-direction: column; 
+   
+    width: 100%;
+    max-width: 400px; 
+    margin: 0 auto; 
+  }
+
+  .imageSection {
+    display: none; 
+  }
+
+  .formSection {
+    padding: 20px; 
+  }
+
+  .title {
+    font-size: 22px; 
+    text-align: center; 
+  }
+
+  .subTitle {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .form {
+    gap: 10px; 
+    width: 100%; 
+  }
+
+  .input {
+    width: 90%; 
+    height: 40px; 
+    font-size: 14px;
+  }
+
+  .button {
+    width: 100%; 
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .footer {
+    font-size: 12px; 
+    text-align: center;
+    margin-top: 15px;
+  }
+}
+
+
+@media (max-width: 375px) {
+  .title {
+    font-size: 20px; 
+  }
+
+  .subTitle {
+    font-size: 12px;
+  }
+
+  .input {
+    font-size: 12px;
+    height: 35px; 
+  }
+
+  .button {
+    font-size: 14px; 
+  }
+
+  .footer {
+    font-size: 10px; 
+  }
+}
+

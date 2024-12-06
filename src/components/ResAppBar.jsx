@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import styles from '../styles/ResAppBar.module.css';
+import styles from '../styles_components/ResAppBar.module.css';
 import jwtDecode from 'jwt-decode';
 import logo from '../assets/logo.svg';
 import arrow from '../assets/arrow.png';
@@ -82,17 +82,19 @@ const ResAppBar = () => {
           <Link to="/" className={styles.logo}>
             <img src={logo} alt="Logo" />
           </Link>
-          <button className={styles.menuButton} onClick={toggleNavMenu}>
-            ☰
-          </button>
+          
           <nav className={`${styles.navMenu} ${navOpen ? styles.open : ''}`}>
             <div
               className={`${styles.dropdown} ${dropdownOpen ? styles.dropdownOpen : ''}`}
               onMouseEnter={() => setDropdownOpen(true)}
               onMouseLeave={() => setDropdownOpen(false)}
             >
-              <button className={styles.dropbtn}>Topics <img src={arrow}></img></button>
-              <div className={styles.dropdownContent}>
+              <button className={styles.dropbtn}>☰</button>
+              <div
+                className={`${styles.dropdownContent} ${
+                  dropdownOpen || navOpen ? styles.dropdownOpen : ''
+                }`}
+              >
                 {Object.keys(options).map((key) => (
                   <Link
                     key={key}
@@ -113,15 +115,17 @@ const ResAppBar = () => {
                 onMouseEnter={() => setUserDropdownOpen(true)}
                 onMouseLeave={() => setUserDropdownOpen(false)}
               >
-                <button className={styles.avatarButton}>
-                  <h2>{profile?.name}</h2>
-                  <img
-                    src={profile?.avatar || '/default-avatar.png'}
-                    alt="User Avatar"
-                    className={styles.avatar}
-                  />
-                  
-                </button>
+                <div className={styles.profile}>
+                  <button className={styles.avatarButton}>
+                    <p>{profile?.name}</p> 
+                    <img
+                      src={profile?.avatar || '/default-avatar.png'}
+                      alt="User Avatar"
+                      className={styles.avatar}
+                    />
+                    
+                  </button>
+                </div>
                 <div
                   className={`${styles.dropdownContent} ${
                     userDropdownOpen ? styles.dropdownOpen : ''

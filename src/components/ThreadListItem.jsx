@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-import styles from '../styles/ThreadListItem.module.css';
+import styles from '../styles_components/ThreadListItem.module.css';
 
 const ThreadListItem = ({ thread }) => {
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import Cookies from 'js-cookie';
-import styles from '../styles/ProfileEditForm.module.css';
+import styles from '../styles_components/ProfileEditForm.module.css';
 
 const ProfileEditForm = ({ profile, onUpdateProfile }) => {
   const { user, getAuthHeaders } = useContext(AuthContext); // getAuthHeaders to include Authorization

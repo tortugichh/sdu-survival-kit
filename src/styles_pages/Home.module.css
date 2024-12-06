@@ -73,20 +73,14 @@
   flex-direction: column;
   align-items: flex-start;
   flex: 1; 
+  width: 100%;
   color: white;
   padding: 20px;
   box-sizing: border-box;
   background-color: transparent;
 }
 
-.topThreadContainer {
-  flex: 1; 
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: space-between; 
-  height: 100%; 
-}
+
 
 .mainContent {
   flex: 3; 
@@ -104,6 +98,7 @@
 .threadContainer {
   flex: 1;
   min-height: 500px;
+  width: 100%;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -165,11 +160,25 @@
     gap: 10px;
   }
 
-  .leftSidebar,
+
   .rightSidebar,
   .mainContent {
     width: 100%;
     margin: 0;
+  }
+  .mainContent{
+    flex: 2;
+  }
+
+  .leftSidebar{
+    display: none;
+    flex: 2;
+  }
+  .rightSidebar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 
   .topicLink {
@@ -182,12 +191,16 @@
   .contentWrapper {
     flex-direction: row;
     gap: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .leftSidebar,
   .rightSidebar {
     flex: 1;
   }
+  
 
   .mainContent {
     flex: 2;

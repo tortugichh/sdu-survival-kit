@@ -1,22 +1,23 @@
 import React, { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
-import styles from '../styles/Signup.module.css';
+import styles from '../styles_pages/Signup.module.css';
 import { Link } from 'react-router-dom';
-import image from '../assets/image.jpg';
+import registr_image from '../assets/registr.jpg';
 import logo from '../assets/logo.svg';
+
 export default function SignUp() {
-  const { registerUser } = useContext(AuthContext); // Get registerUser from context
-  const [errors, setErrors] = useState([]); // State for errors
+  const { registerUser } = useContext(AuthContext); 
+  const [errors, setErrors] = useState([]);
 
   const handleRegister = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-    const response = await registerUser(e); // Call registerUser from AuthContext
+    e.preventDefault(); 
+    const response = await registerUser(e); 
 
-    // If there are errors, update the errors state
+    
     if (response?.errors) {
       setErrors(response.errors);
     } else {
-      setErrors([]); // Clear errors if registration is successful
+      setErrors([]); 
     }
   };
 
@@ -24,7 +25,7 @@ export default function SignUp() {
     <div className={styles.pageContainer}>
       <div className={styles.signupCard}>
         <div className={styles.imageSection}>
-          <img src={image} alt="image" className={styles.image} />
+          <img src={registr_image} alt="image" className={styles.image} />
         </div>
 
         <div className={styles.formSection}>
@@ -33,7 +34,7 @@ export default function SignUp() {
             Already have an account? <Link to="/login" className={styles.link}>Log in</Link>
           </p>
 
-          {/* Display errors if they exist */}
+          
           {errors.length > 0 && (
             <div className={styles.errorBox}>
               {errors.map((err, index) => (

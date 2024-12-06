@@ -4,7 +4,7 @@ import ThreadForm from '../components/ThreadForm';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Header from '../components/Header';
 import Card from '../components/Card';
-import styles from '../styles/Home.module.css';
+import styles from '../styles_pages/Home.module.css';
 
 const ThreadListPage = () => {
   const [threads, setThreads] = useState([]);
@@ -160,9 +160,7 @@ const ThreadListPage = () => {
                   title={thread.subject}
                   subtitle={thread.creator}
                   link={`/threads/${thread.id}`}
-                  upvoteCount={thread.upvotes?.length || 0} // Display upvote count
-                  downvoteCount={thread.downvotes?.length || 0} // Display downvote count
-                  showVotes={false} // Hide upvote/downvote buttons
+                  showVotes={false} 
                 />
               ))}
           </div>

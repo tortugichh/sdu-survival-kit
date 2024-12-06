@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from '../styles/PasswordReset.module.css';
+import styles from '../styles_pages/PasswordReset.module.css';
 import Cookies from 'js-cookie';
 
 const PasswordConfirm = () => {
