@@ -12,3 +12,4 @@ pytz==2024.2
 whitenoise==6.5.0
 psycopg2==2.9.10
 django-environ==0.11.2
+pytest
