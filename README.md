@@ -59,7 +59,7 @@ The backend of SDU-Survival-Kit serves as the foundation for this modern forum a
 ### **1. Clone the Repository**
 
 ```bash
-git clone <https://github.com/tortugichh/SduSurvivalKit>
+git clone -b backend https://github.com/tortugichh/sdu-survival-kit
 cd SduSurvivalKit
 ```
 
@@ -84,7 +84,6 @@ cd SduSurvivalKit
   DATABASE_PASSWORD=<your_db_password>
   DATABASE_HOST=127.0.0.1
   DATABASE_PORT=5432
-  EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
   EMAIL_HOST=<your_email_host>
   EMAIL_PORT=587
   EMAIL_USE_TLS=True
