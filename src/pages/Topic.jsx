@@ -24,7 +24,7 @@ const Topic = () => {
   const [page, setPage] = useState(2);
   const [hasMore, setHasMore] = useState(true);
 
-  // Fetch initial threads
+
   useEffect(() => {
     const getThreads = async () => {
       const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/topic/${topicID}?page=1`);
@@ -37,7 +37,6 @@ const Topic = () => {
     getThreads();
   }, [params, topicID]);
 
-  // Fetch additional threads
   const getMoreThreads = async () => {
     try {
       const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/topic/${topicID}?page=${page}`);
@@ -58,7 +57,7 @@ const Topic = () => {
     setPage(page + 1);
   };
 
-  // Add a new thread to the list dynamically
+
   const handleThreadCreated = (newThread) => {
     setThreads((prevThreads) => [newThread, ...prevThreads]);
   };
@@ -80,6 +79,7 @@ const Topic = () => {
                 subtitle={`tort - posted on ${thread.created || 'N/A'}`}
                 content={thread.content || 'No content available'}
                 link={`/threads/${thread.id}`}
+                showVotes = {false}
               />
             ))}
             {hasMore && (

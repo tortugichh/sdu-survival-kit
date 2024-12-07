@@ -19,14 +19,10 @@ const ProfileEditForm = ({ profile, onUpdateProfile }) => {
   const handleProfile = async (event) => {
     event.preventDefault();
 
-    // Get CSRF Token
-    const csrfToken = Cookies.get('csrftoken');
-    if (!csrfToken) {
-      console.error('CSRF-токен отсутствует.');
-      return;
-    }
+    
 
     try {
+      const csrfToken = Cookies.get('csrftoken');
       const response = await fetch(`https://api.sdu-survival-kit.site/api/profile/${userID}/`, {
         method: 'PUT',
         headers: {

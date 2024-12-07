@@ -29,58 +29,48 @@ const ThreadForm = ({ onThreadCreated }) => {
     { value: 8, label: 'Other' },
   ];
 
+  
   const handleThread = async (event) => {
     event.preventDefault();
-
+  
     if (!user) {
       setAlertShow(true);
       return;
     }
+  
+    const updatedThread = { ...thread };
+  
 
-    const updatedThread = {
-      ...thread,
-    };
-
-    let accessToken = authTokens.access;
-
+    const csrfToken = Cookies.get('csrftoken');
+  
     try {
-      const csrfToken = Cookies.get('csrftoken');
-
-      if (!csrfToken) {
-        alert('CSRF token is missing. Please try refreshing the page.');
-        return;
-      }
-
-      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/create/`, {
+      const response = await fetch('https://api.sdu-survival-kit.site/api/threads/create/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken,
-          'Authorization': `Bearer ${accessToken}`,
+          'X-CSRFToken': csrfToken, 
+          'Authorization': `Bearer ${authTokens.access}`,
         },
         body: JSON.stringify(updatedThread),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         setThread({ subject: '', content: '', topic: '' });
         handleClose();
-
-      
-
+  
         if (onThreadCreated) {
           onThreadCreated(data);
         }
       } else {
         const errorText = await response.text();
         alert(`Failed to create thread. Error: ${errorText}`);
-        console.error('Failed to create thread:', errorText);
       }
     } catch (error) {
       alert(`An error occurred: ${error.message}`);
-      console.error('Error creating thread:', error);
     }
   };
+  
 
   return (
     <div>

@@ -4,7 +4,7 @@ import styles from '../styles_pages/PasswordReset.module.css';
 import Cookies from 'js-cookie';
 
 const PasswordConfirm = () => {
-  const { uid, token } = useParams(); // Get uid and token from the URL
+  const { uid, token } = useParams(); 
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -13,22 +13,24 @@ const PasswordConfirm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Получение CSRF токена
-    const csrfToken = Cookies.get('csrftoken');
+   
+    
 
     try {
+      
+      const csrfToken = Cookies.get('csrftoken');
       const response = await fetch('https://api.sdu-survival-kit.site/api/password_reset_confirm/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken, // Вставляем CSRF токен
+          'X-CSRFToken': csrfToken, 
         },
         body: JSON.stringify({ uid, token, new_password: newPassword }),
       });
 
       if (response.ok) {
         setMessage('Password reset successful. You will be redirected to login.');
-        setTimeout(() => navigate('/login'), 5000); // Redirect to login after 5 seconds
+        setTimeout(() => navigate('/login'), 5000); 
       } else {
         const data = await response.json();
         setError(data.error || 'Failed to reset password.');

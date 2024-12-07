@@ -21,9 +21,9 @@ const PasswordReset = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken, // Вставляем CSRF токен
+          'X-CSRFToken': csrfToken, 
         },
-        body: JSON.stringify({ email }), // Передаем email в теле запроса
+        body: JSON.stringify({ email }), 
       });
 
       if (response.ok) {

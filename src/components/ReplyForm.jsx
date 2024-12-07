@@ -28,13 +28,10 @@ const ReplyForm = ({ thread }) => {
     }
 
    
-    const csrfToken = Cookies.get('csrftoken');
-    if (!csrfToken) {
-      console.error('CSRF-токен отсутствует.');
-      return;
-    }
+   
 
     try {
+      const csrfToken = Cookies.get('csrftoken');
       const response = await fetch(`https://api.sdu-survival-kit.site/api/posts/create/`, {
         method: 'POST',
         headers: {

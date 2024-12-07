@@ -30,11 +30,11 @@ const Bookmark = () => {
   };
 
   useEffect(() => {
-    if (!user) return; // Ensure user is defined before making API call
+    if (!user) return; 
 
     const getThreads = async () => {
       try {
-        // Ensure token is updated if expired
+     
         if (authTokens && isTokenExpired(authTokens.access)) {
           await updateToken();
         }
@@ -64,7 +64,7 @@ const Bookmark = () => {
 
   const fetchMoreThreads = async () => {
     try {
-      // Ensure token is updated if expired
+    
       if (authTokens && isTokenExpired(authTokens.access)) {
         await updateToken();
       }

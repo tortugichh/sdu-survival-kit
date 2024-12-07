@@ -19,13 +19,7 @@ const Thread = () => {
   const [pin, setPin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const getCSRFToken = () => {
-    const csrfToken = Cookies.get('csrftoken');
-    if (!csrfToken) {
-      console.error('CSRF-token отсутствует.');
-    }
-    return csrfToken;
-  };
+  
 
   const isTokenExpired = (token) => {
     try {
@@ -115,11 +109,8 @@ const Thread = () => {
     }
 
     try {
-      const csrfToken = getCSRFToken();
-      if (!csrfToken) {
-        console.error('CSRF token not found.');
-        return;
-      }
+      const csrfToken = Cookies.get('csrftoken');
+      
 
       const response = await fetch(`https://api.sdu-survival-kit.site/api/pin/`, {
         method: 'POST',

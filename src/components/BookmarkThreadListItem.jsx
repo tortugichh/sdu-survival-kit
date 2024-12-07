@@ -10,14 +10,11 @@ const BookmarkThreadListItem = ({ thread }) => {
   const [hide, setHide] = useState(false);
 
   const handleBookmark = async () => {
-    // Get CSRF Token
-    const csrfToken = Cookies.get('csrftoken');
-    if (!csrfToken) {
-      console.error('CSRF-токен отсутствует.');
-      return;
-    }
+    
+    
 
     try {
+      const csrfToken = Cookies.get('csrftoken');
       const response = await fetch(`https://api.sdu-survival-kit.site/api/pin/`, {
         method: 'POST',
         headers: {
