@@ -73,7 +73,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ("id", "creator", "created", "content", "updated", "thread", "creator_id")
 
-
+# Bookmark Serializer
 class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pin

@@ -1,7 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
@@ -13,8 +12,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from .models import Thread, Post, Profile, Pin
-from .serializers import ThreadSerializer, PostSerializer, MyTokenObtainPairSerializer, RegisterSerializer, \
-    PinSerializer, ProfileSerializer, BookmarkSerializer
+from .serializers import ThreadSerializer, PostSerializer, MyTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 import environ
@@ -122,27 +120,20 @@ class ThreadVoteView(APIView):
         thread = get_object_or_404(Thread, pk=thread_id)
         user = request.user
 
-        # Логика для управления голосами
         if action == 'upvote':
             if thread.downvotes.filter(pk=user.pk).exists():
-                # Если пользователь уже голосовал против, удаляем этот голос
                 thread.downvotes.remove(user)
             if thread.upvotes.filter(pk=user.pk).exists():
-                # Если пользователь уже голосовал за, удаляем этот голос
                 thread.upvotes.remove(user)
             else:
-                # Добавляем голос "за"
                 thread.upvotes.add(user)
 
         elif action == 'downvote':
             if thread.upvotes.filter(pk=user.pk).exists():
-                # Если пользователь уже голосовал за, удаляем этот голос
                 thread.upvotes.remove(user)
             if thread.downvotes.filter(pk=user.pk).exists():
-                # Если пользователь уже голосовал против, удаляем этот голос
                 thread.downvotes.remove(user)
             else:
-                # Добавляем голос "против"
                 thread.downvotes.add(user)
 
         else:
