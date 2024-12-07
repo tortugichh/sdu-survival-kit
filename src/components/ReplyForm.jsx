@@ -27,7 +27,7 @@ const ReplyForm = ({ thread }) => {
       return;
     }
 
-    // Get CSRF Token
+   
     const csrfToken = Cookies.get('csrftoken');
     if (!csrfToken) {
       console.error('CSRF-токен отсутствует.');
@@ -53,7 +53,7 @@ const ReplyForm = ({ thread }) => {
         console.log('Post created:', data);
         setPost({ content: '', thread: '', creator: { user } });
         handleClose();
-        window.location.reload(); // Reload to display the new reply
+        window.location.reload(); 
       } else {
         const errorText = await response.text();
         console.error('Failed to create post:', errorText);

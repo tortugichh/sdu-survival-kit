@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  min-width: 100%;
+  width: 100%;
   background: transparent;
 }
 
@@ -24,7 +24,7 @@
   gap: 20px;
   width: 100%;
   max-width: 100%;
-  padding: 20px;
+  padding: 40px 0px;
   box-sizing: border-box;
   align-items: stretch; 
   background-color: transparent;
@@ -84,14 +84,13 @@
 
 .mainContent {
   flex: 3; 
-  margin-right: 10px; 
   text-align: center;
   font-weight: 700;
   color: white;
   display: flex;
   flex-direction: column;
   background-color: transparent;
-  padding: 20px;
+  padding: 20px 0px;
 }
 
 
@@ -105,7 +104,7 @@
   gap: 20px;
   border-radius: 15px;
   background-color: transparent;
-  border: none;
+  padding: 10px 0px;
 }
 
 .loaderText,
@@ -158,8 +157,21 @@
   .contentWrapper {
     flex-direction: column;
     gap: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+
   }
 
+  .pageContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
 
   .rightSidebar,
   .mainContent {

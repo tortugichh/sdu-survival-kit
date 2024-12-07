@@ -4,7 +4,8 @@
     color: white;
     border-radius: 10px;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     justify-content: flex-start;
@@ -40,12 +41,16 @@
   }
   
   .voteButton {
-    background-color: #007bff;
     color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
+    background-color: #1E64FA;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
+    border: transparent;
   }
   
   .voteButton:hover {
