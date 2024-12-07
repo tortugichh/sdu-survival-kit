@@ -40,7 +40,7 @@ jobs:
           POSTGRES_PASSWORD: test_password
           POSTGRES_DB: test_db
         ports:
-          - 5431:5432  # Map custom port 5433 to PostgreSQL's default 5432
+          - 5433:5432
         options: >-
           --health-cmd="pg_isready -U test_user"
           --health-interval=10s
@@ -68,7 +68,12 @@ jobs:
         DATABASE_USER: test_user
         DATABASE_PASSWORD: test_password
         DATABASE_HOST: 127.0.0.1
-        DATABASE_PORT: 5431
+        DATABASE_PORT: 5433
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
+        EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+        EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
       run: |
         pytest
 
