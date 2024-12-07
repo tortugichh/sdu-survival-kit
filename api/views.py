@@ -198,7 +198,7 @@ class PasswordResetAPIView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
 
-            reset_link = f"https://sdu-survival-kit.site/passwordconfirm/{uid}/{token}"
+            reset_link = f"https://sdusurvivalkit-fufsfhdbeqeqb4eq.canadacentral-01.azurewebsites.net/passwordconfirm/{uid}/{token}"
             message = render_to_string('email/password_reset_email.html', {
                 'user': user,
                 'reset_link': reset_link,
