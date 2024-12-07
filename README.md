@@ -78,6 +78,7 @@ cd SduSurvivalKit
   ```env
   DEBUG=True
   SECRET_KEY=<your_secret_key>
+  ALLOWED_HOSTS=<allowed-hosts>
   DATABASE_NAME=<your_db_name>
   DATABASE_USER=<your_db_user>
   DATABASE_PASSWORD=<your_db_password>
@@ -111,6 +112,64 @@ cd SduSurvivalKit
   ```bash
   python manage.py runserver
   ```
+
+---
+
+## **Troubleshooting**
+
+### Gunicorn Fails to Start
+- Check the Gunicorn service logs:
+  ```bash
+  sudo journalctl -u gunicorn
+  ```
+- Ensure the Gunicorn socket has the correct permissions:
+  ```bash
+  sudo chown ubuntu:www-data /run/gunicorn.sock
+  ```
+
+### Nginx Fails to Serve API
+- Check Nginx error logs:
+  ```bash
+  sudo tail -f /var/log/nginx/error.log
+  ```
+- Ensure the domain name in `/etc/nginx/sites-available/` matches your SSL certificate.
+
+### Database Connection Issues
+- Verify `.env` variables for database configuration:
+  ```env
+  DATABASE_NAME=<your_db_name>
+  DATABASE_USER=<your_db_user>
+  DATABASE_PASSWORD=<your_db_password>
+  DATABASE_HOST=<your_database_host>
+  DATABASE_PORT=<your_database_port>
+  ```
+- Test the connection with:
+  ```bash
+  psql -U <your_db_user> -d <your_db_name> -h 127.0.0.1 -p 5432
+  ```
+
+---
+
+## **Code and Commit Naming Conventions**
+
+### Code Style
+- **Python**: Follow PEP 8 guidelines.
+- **Variable Naming**: Use `snake_case` for variables and functions.
+
+### Commit Messages
+- Use the following format:
+  ```
+  [Feature/Fix/Refactor]: Brief Description
+  ```
+  Example:
+  ```
+  [Feature]: Added password reset functionality
+  ```
+
+### Branch Naming
+- Use the format `<type>/<description>`:
+  - `feature/<feature-name>`
+  - `bugfix/<bug-description>`
 
 ---
 
@@ -202,6 +261,16 @@ cd SduSurvivalKit
   ```bash
   curl -X GET https://api.sdu-survival-kit.site/api/threads/ -H "Authorization: Token <your_token>"
   ```
+
+---
+
+## **Screenshots**
+
+### Example API Response
+![API Response in Postman](path/to/postman-screenshot.png)
+
+### Django Admin Panel
+![Admin Panel](path/to/admin-screenshot.png)
 
 ---
 
