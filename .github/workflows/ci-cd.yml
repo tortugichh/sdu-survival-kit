@@ -1,14 +1,14 @@
-name: Backend CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - backend
       - staging-backend
+      - backend
   pull_request:
     branches:
-      - backend
       - staging-backend
+      - backend
 
 jobs:
   build:
@@ -40,7 +40,7 @@ jobs:
           POSTGRES_PASSWORD: test_password
           POSTGRES_DB: test_db
         ports:
-          - 5431:5432
+          - 5433:5432
         options: >-
           --health-cmd="pg_isready -U test_user"
           --health-interval=10s
@@ -68,7 +68,7 @@ jobs:
         DATABASE_USER: test_user
         DATABASE_PASSWORD: test_password
         DATABASE_HOST: 127.0.0.1
-        DATABASE_PORT: 5431
+        DATABASE_PORT: 5433
         EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
         EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
         EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
@@ -86,10 +86,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up SSH Key for Staging
+    - name: Set up SSH Agent
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.STAGING_SSH_KEY }}
+
+    - name: Add SSH Host Key
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H staging-api.sdu-survival-kit.site >> ~/.ssh/known_hosts
 
     - name: Deploy to Staging
       run: |
@@ -112,10 +117,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up SSH Key for Production
+    - name: Set up SSH Agent
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+
+    - name: Add SSH Host Key
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H api.sdu-survival-kit.site >> ~/.ssh/known_hosts
 
     - name: Deploy to Production
       run: |
