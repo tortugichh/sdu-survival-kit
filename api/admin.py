@@ -41,3 +41,4 @@ class PostAdmin(admin.ModelAdmin):
 class PinAdmin(admin.ModelAdmin):
     list_display = ('user', 'thread')
     search_fields = ('user__username', 'thread__subject')
+#
