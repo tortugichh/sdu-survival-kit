@@ -32,6 +32,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5431:5432  # Map custom port 5433 to PostgreSQL's default 5432
+        options: >-
+          --health-cmd="pg_isready -U test_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -49,6 +64,11 @@ jobs:
     - name: Run tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DATABASE_NAME: test_db
+        DATABASE_USER: test_user
+        DATABASE_PASSWORD: test_password
+        DATABASE_HOST: 127.0.0.1
+        DATABASE_PORT: 5431
       run: |
         pytest
 

@@ -82,11 +82,11 @@ ASGI_APPLICATION = 'myforum.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'HOST': env('DATABASE_HOST'),
-        'PORT': env('DATABASE_PORT'),
+        'NAME': env('DATABASE_NAME', default='test_db'),
+        'USER': env('DATABASE_USER', default='test_user'),
+        'PASSWORD': env('DATABASE_PASSWORD', default='test_password'),
+        'HOST': env('DATABASE_HOST', default='127.0.0.1'),
+        'PORT': env('DATABASE_PORT', default='5431'),
     }
 }
 
