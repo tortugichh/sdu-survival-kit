@@ -2,3 +2,6 @@
 .env
 /api/__pycache__/
 /myforum/__pycache__/
+api/migrations/__pycache__/
+static/
+sdu-survival
