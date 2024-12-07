@@ -60,7 +60,7 @@ The backend of SDU-Survival-Kit serves as the foundation for this modern forum a
 
 ```bash
 git clone -b backend https://github.com/tortugichh/sdu-survival-kit
-cd SduSurvivalKit
+cd sdu-survival-kit
 ```
 
 ### **2. Setup Environment**
