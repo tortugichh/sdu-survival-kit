@@ -266,10 +266,10 @@ cd sdu-survival-kit
 ## **Screenshots**
 
 ### Example API Response
-![API Response in Postman](path/to/postman-screenshot.png)
+![API Response in Postman](https://i.imgur.com/FZU5rZv.png)
 
 ### Django Admin Panel
-![Admin Panel](path/to/admin-screenshot.png)
+![Admin Panel](https://i.imgur.com/qNhBZGE.png)
 
 ---
 
