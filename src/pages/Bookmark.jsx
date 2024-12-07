@@ -39,7 +39,7 @@ const Bookmark = () => {
           await updateToken();
         }
 
-        const response = await fetch(`/api/bookmark/${user['user_id']}?page=1`, {
+        const response = await fetch(`https://api.sdu-survival-kit.site/api/bookmark/${user['user_id']}?page=1`, {
           headers: getAuthHeaders(),
         });
 
@@ -69,7 +69,7 @@ const Bookmark = () => {
         await updateToken();
       }
 
-      const response = await fetch(`/api/bookmark/${user['user_id']}?page=${page}`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/bookmark/${user['user_id']}?page=${page}`, {
         headers: getAuthHeaders(),
       });
 

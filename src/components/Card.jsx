@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import styles from '../styles_components/Card.module.css';
+import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 
 const Card = ({
@@ -27,7 +28,7 @@ const Card = ({
 
   const fetchThreadData = () => {
     if (threadId && showVotes) {
-      fetch(`/api/threads/${threadId}/`, {
+      fetch(`https://api.sdu-survival-kit.site/api/threads/${threadId}/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ const Card = ({
       }));
       setUserVote(userVote === 'upvote' ? null : 'upvote');
 
-      const response = await fetch(`/api/threads/${threadId}/upvote/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/${threadId}/upvote/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +108,7 @@ const Card = ({
       }));
       setUserVote(userVote === 'downvote' ? null : 'downvote');
 
-      const response = await fetch(`/api/threads/${threadId}/downvote/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/${threadId}/downvote/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,45 +134,51 @@ const Card = ({
   };
 
   return (
-    <div className={styles.card}>
-      {link ? (
-        <a href={link} className={styles.cardLink}>
-          <h3 className={styles.cardTitle}>{title}</h3>
-        </a>
-      ) : (
-        <h3 className={styles.cardTitle}>{title}</h3>
-      )}
-      {content && <p className={styles.cardContent}>{content}</p>}
-      {subtitle && <p className={styles.cardSubtitle}>{subtitle}</p>}
+    <Link to={link || '#'} className={styles.card}>
       
+        <h3 className={styles.cardTitle}>{title}</h3>
+        {content && <p className={styles.cardContent}>{content}</p>}
+        {subtitle && <p className={styles.cardSubtitle}>{subtitle}</p>}
+     
       {buttonText && (
-        <button className={buttonClassName || styles.defaultButton} onClick={onButtonClick}>
+        <button
+          className={buttonClassName || styles.defaultButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onButtonClick && onButtonClick();
+          }}
+        >
           {buttonText}
         </button>
       )}
-      {showVotes ? (
+      {showVotes && (
         <div className={styles.voteContainer}>
           <button
             className={`${styles.voteButton} ${userVote === 'upvote' ? styles.activeVote : ''}`}
-            onClick={handleUpvote}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleUpvote();
+            }}
             disabled={userVote === 'upvote'}
           >
             Upvote: {voteCount.upvotes}
           </button>
           <button
             className={`${styles.voteButton} ${userVote === 'downvote' ? styles.activeVote : ''}`}
-            onClick={handleDownvote}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleDownvote();
+            }}
             disabled={userVote === 'downvote'}
           >
             Downvote: {voteCount.downvotes}
           </button>
         </div>
-      ) : (
-        <div className={styles.voteCount}>
-          
-        </div>
       )}
-    </div>
+    </Link>
   );
 };
 

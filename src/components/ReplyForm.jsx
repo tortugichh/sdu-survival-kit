@@ -35,7 +35,7 @@ const ReplyForm = ({ thread }) => {
     }
 
     try {
-      const response = await fetch(`/api/posts/create/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/posts/create/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

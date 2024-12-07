@@ -17,7 +17,7 @@ const PasswordConfirm = () => {
     const csrfToken = Cookies.get('csrftoken');
 
     try {
-      const response = await fetch('/api/password_reset_confirm/', {
+      const response = await fetch('https://api.sdu-survival-kit.site/api/password_reset_confirm/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

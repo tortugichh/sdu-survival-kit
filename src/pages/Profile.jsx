@@ -26,7 +26,7 @@ const Profile = () => {
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const response = await fetch(`/api/profile/${profileID}/`, {
+        const response = await fetch(`https://api.sdu-survival-kit.site/api/profile/${profileID}/`, {
           headers: {
             'Authorization': `Bearer ${authTokens?.access}`,  
           },

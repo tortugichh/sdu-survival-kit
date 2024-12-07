@@ -51,7 +51,7 @@ const ThreadForm = ({ onThreadCreated }) => {
         return;
       }
 
-      const response = await fetch(`/api/threads/create/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/create/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

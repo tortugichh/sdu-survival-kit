@@ -27,7 +27,7 @@ const Topic = () => {
   // Fetch initial threads
   useEffect(() => {
     const getThreads = async () => {
-      const response = await fetch(`/api/threads/topic/${topicID}?page=1`);
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/topic/${topicID}?page=1`);
       const data = await response.json();
       setThreads(data.results);
       if (data.next === null) {
@@ -40,7 +40,7 @@ const Topic = () => {
   // Fetch additional threads
   const getMoreThreads = async () => {
     try {
-      const response = await fetch(`/api/threads/topic/${topicID}?page=${page}`);
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/topic/${topicID}?page=${page}`);
       const data = await response.json();
       return data.results;
     } catch (err) {

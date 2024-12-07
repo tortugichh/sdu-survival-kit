@@ -26,7 +26,7 @@ const ThreadListPage = () => {
   useEffect(() => {
     const getTopThreads = async () => {
       try {
-        const response = await fetch('/api/topThreads');
+        const response = await fetch('https://api.sdu-survival-kit.site/api/topThreads');
         if (!response.ok) {
           throw new Error('Failed to fetch top threads');
         }
@@ -48,7 +48,7 @@ const ThreadListPage = () => {
   useEffect(() => {
     const getThreads = async () => {
       try {
-        const response = await fetch('/api/threads/?page=1');
+        const response = await fetch('https://api.sdu-survival-kit.site/api/threads/?page=1');
         if (!response.ok) {
           throw new Error('Failed to fetch threads');
         }
@@ -72,7 +72,7 @@ const ThreadListPage = () => {
 
   const getMoreThreads = async () => {
     try {
-      const response = await fetch(`/api/threads/?page=${page}`);
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/?page=${page}`);
       if (!response.ok) {
         throw new Error('Failed to fetch more threads');
       }
@@ -100,6 +100,12 @@ const ThreadListPage = () => {
 
   const handleThreadCreated = (newThread) => {
     setThreads((prevThreads) => [newThread, ...prevThreads]);
+
+    setTopThreads((prevTopThreads) => {
+      const updatedTopThreads = [newThread, ...prevTopThreads];
+  
+      return updatedTopThreads.slice(0, 10);
+    });
   };
 
   return (
@@ -107,7 +113,6 @@ const ThreadListPage = () => {
       <Header />
       <div className={styles.contentWrapper}>
         <aside className={styles.leftSidebar}>
-          <div className={styles.leftHeader}></div>
           <div className={styles.topicList}>
             <h2>Topics</h2>
             {Object.keys(topics).map((key) => (

@@ -46,7 +46,7 @@ const Thread = () => {
   useEffect(() => {
     const fetchThread = async () => {
       try {
-        const response = await fetch(`/api/threads/${threadID}/`);
+        const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/${threadID}/`);
         if (!response.ok) {
           console.error('Failed to fetch thread:', response.statusText);
           return;
@@ -69,7 +69,7 @@ const Thread = () => {
           headers = getAuthHeaders();
         }
 
-        const response = await fetch(`/api/threads/${threadID}/posts/`, {
+        const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/${threadID}/posts/`, {
           headers,
         });
 
@@ -91,7 +91,7 @@ const Thread = () => {
             await updateToken();
           }
 
-          const response = await fetch(`/api/pin/${threadID}&&${user.user_id}/`, {
+          const response = await fetch(`https://api.sdu-survival-kit.site/api/pin/${threadID}&&${user.user_id}/`, {
             headers: getAuthHeaders(),
           });
           if (!response.ok) return;
@@ -121,7 +121,7 @@ const Thread = () => {
         return;
       }
 
-      const response = await fetch(`/api/pin/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/pin/`, {
         method: 'POST',
         headers: {
           ...getAuthHeaders(),

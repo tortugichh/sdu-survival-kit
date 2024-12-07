@@ -11,7 +11,7 @@ const Test = () => {
     // Initial fetch
     const getThreads = async () => {
       try {
-        const response = await fetch(`/api/threads/?page=${page}`);
+        const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/?page=${page}`);
         const data = await response.json();
         setThreads(data.results);
         if (data.results.length === 0 || data.results.length < 15) {
@@ -30,7 +30,7 @@ const Test = () => {
     setIsFetching(true);
     try {
       const nextPage = page + 1;
-      const response = await fetch(`/api/threads/?page=${nextPage}`);
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/threads/?page=${nextPage}`);
       const data = await response.json();
 
       setThreads((prevThreads) => [...prevThreads, ...data.results]);

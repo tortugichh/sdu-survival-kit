@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import styles from '../styles_components/ProfileEditForm.module.css';
 
 const ProfileEditForm = ({ profile, onUpdateProfile }) => {
-  const { user, getAuthHeaders } = useContext(AuthContext); // getAuthHeaders to include Authorization
+  const { user, getAuthHeaders } = useContext(AuthContext); 
   const userID = user['user_id'];
 
   const [open, setOpen] = useState(false);
@@ -27,12 +27,12 @@ const ProfileEditForm = ({ profile, onUpdateProfile }) => {
     }
 
     try {
-      const response = await fetch(`/api/profile/${userID}/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/profile/${userID}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken,
-          ...getAuthHeaders(), // Include Authorization headers
+          ...getAuthHeaders(), 
         },
         body: JSON.stringify(newProfile),
       });
@@ -41,10 +41,10 @@ const ProfileEditForm = ({ profile, onUpdateProfile }) => {
         const data = await response.json();
         console.log('Profile updated successfully:', data);
 
-        // Update the parent state to reflect changes immediately
+        
         onUpdateProfile(newProfile);
 
-        handleClose(); // Close the dialog after saving
+        handleClose(); 
       } else {
         const errorText = await response.text();
         console.error('Failed to update profile:', errorText);

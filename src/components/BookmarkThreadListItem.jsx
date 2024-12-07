@@ -18,7 +18,7 @@ const BookmarkThreadListItem = ({ thread }) => {
     }
 
     try {
-      const response = await fetch(`/api/pin/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/pin/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,8 +32,6 @@ const BookmarkThreadListItem = ({ thread }) => {
       });
 
       if (response.ok) {
-        // The backend toggles between adding and removing bookmarks.
-        // If the bookmark is removed successfully, update the UI
         const data = await response.json();
         if (data.message === 'Bookmark removed.') {
           setHide(true);

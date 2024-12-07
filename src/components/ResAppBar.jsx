@@ -35,7 +35,7 @@ const ResAppBar = () => {
             await updateToken();
           }
 
-          const response = await fetch(`/api/profile/${userID}/`, {
+          const response = await fetch(`https://api.sdu-survival-kit.site/api/profile/${userID}/`, {
             headers: getAuthHeaders(),
           });
 

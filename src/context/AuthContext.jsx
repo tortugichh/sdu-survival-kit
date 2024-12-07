@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch('/api/token/refresh/', {
+      const response = await fetch('https://api.sdu-survival-kit.site/api/token/refresh/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     const credentials = new FormData(e.currentTarget);
 
     try {
-      const response = await fetch(`/api/token/`, {
+      const response = await fetch(`https://api.sdu-survival-kit.site/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }) => {
     const credentials = new FormData(e.currentTarget);
 
     try {
-      const response = await fetch('/api/register/', {
+      const response = await fetch('https://api.sdu-survival-kit.site/api/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
