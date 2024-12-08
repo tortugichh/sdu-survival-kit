@@ -2,6 +2,10 @@
 
 The frontend of SDU-Survival-Kit is a user-centric interface designed to provide a seamless forum experience for students. Built with React.js, it ensures an interactive and responsive UI for engaging with threads, posts, and other features.
 
+### Quick Links
+- **Frontend App**: [SDU-Survival-Kit Frontend](https://sdusurvivalkit-fufsfhdbeqeqb4eq.canadacentral-01.azurewebsites.net/)
+- **Backend API**: [SDU-Survival-Kit API](https://api.sdu-survival-kit.site/)
+
 ---
 
 ## **Frontend Features**
