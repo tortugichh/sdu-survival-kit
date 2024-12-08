@@ -118,30 +118,10 @@ src/
 
 ## **Deployment**
 
-The frontend is deployed using **Vercel**, providing a globally distributed platform for high performance.
-
-### **Deployment Steps**
-
-1. **Build the Project**:
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to Vercel**:
-   - Install the Vercel CLI:
-     ```bash
-     npm install -g vercel
-     ```
-   - Deploy the build:
-     ```bash
-     vercel
-     ```
-
-3. **Environment Variables**:
-   - Set the `REACT_APP_API_URL` variable in the Vercel project settings.
-
-4. **Access the Deployed Site**:
-   - The site will be available at the Vercel-provided URL (e.g., `https://sdu-survival-kit.vercel.app`).
+The frontend is deployed using **Microsoft Azure**, providing a globally distributed platform for high performance.
+    
+    **Access the Deployed Site**:
+   - The site will be available at the Azure-provided URL.
 
 ---
 
@@ -154,15 +134,6 @@ The frontend is deployed using **Vercel**, providing a globally distributed plat
 ### API Testing
 - Interact with the backend API directly using Postman or the browser console.
 
----
-
-## **Screenshots**
-
-### Home Page
-![Home Page](https://i.imgur.com/xP3hoYO.png)
-
-### Profile
-![Profile Page](https://i.imgur.com/QUwe6Hv.png)
 
 ---
 
