@@ -1,6 +1,12 @@
 # SDU-SURVIVAL-KIT Backend
 
-The backend of SDU-Survival-Kit serves as the foundation for this modern forum application, providing APIs, authentication, and database management. Built with Django and Django REST Framework, it ensures robust and scalable functionality for handling user interactions, content management, and security.
+Welcome to the backend of **SDU-Survival-Kit**, the powerhouse driving this cutting-edge forum application! Designed with scalability, performance, and security in mind, our backend ensures seamless integration with the frontend, enabling dynamic user interactions and efficient content management.
+
+Built using **Django** and **Django REST Framework**, this backend forms a robust foundation, managing authentication, database operations, and API endpoints effortlessly.
+
+### Quick Links
+- **Frontend App**: [SDU-Survival-Kit Frontend](https://sdusurvivalkit-fufsfhdbeqeqb4eq.canadacentral-01.azurewebsites.net/)
+- **Backend API**: [SDU-Survival-Kit API](https://api.sdu-survival-kit.site/)
 
 ---
 
@@ -249,7 +255,6 @@ cd sdu-survival-kit
 ## **Deployment Details**
 
 - The backend is deployed on **AWS EC2** using Nginx and Gunicorn.
-- The live API is accessible at: [https://api.sdu-survival-kit.site](https://api.sdu-survival-kit.site)
 
 ---
 
