@@ -56,7 +56,7 @@ The frontend of SDU-Survival-Kit is a user-centric interface designed to provide
 ### **1. Clone the Repository**
 
 ```bash
-git clone -b frontend https://github.com/tortugichh/sdu-survival-kit
+git clone https://github.com/tortugichh/sdu-survival-kit
 cd sdu-survival-kit
 ```
 
