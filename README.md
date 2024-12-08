@@ -7,6 +7,7 @@ Built using **Django** and **Django REST Framework**, this backend forms a robus
 ### Quick Links
 - **Frontend App**: [SDU-Survival-Kit Frontend](https://sdusurvivalkit-fufsfhdbeqeqb4eq.canadacentral-01.azurewebsites.net/)
 - **Backend API**: [SDU-Survival-Kit API](https://api.sdu-survival-kit.site/)
+- **API Instructions**: [API Documentation](API-instructions)
 
 ---
 

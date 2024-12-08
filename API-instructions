@@ -1,0 +1,346 @@
+# API Documentation for Backend
+
+## Authentication
+All API endpoints require authentication unless otherwise stated. Authentication is done using JSON Web Tokens (JWT).
+
+### Obtain Token
+**POST** `/api/token/`
+
+Request:
+```json
+{
+  "username": "<your_username>",
+  "password": "<your_password>"
+}
+```
+
+Response:
+```json
+{
+  "access": "<access_token>",
+  "refresh": "<refresh_token>"
+}
+```
+
+### Refresh Token
+**POST** `/api/token/refresh/`
+
+Request:
+```json
+{
+  "refresh": "<refresh_token>"
+}
+```
+
+Response:
+```json
+{
+  "access": "<new_access_token>"
+}
+```
+
+---
+
+## User Management
+
+### Register User
+**POST** `/api/register/`
+
+Request:
+```json
+{
+  "username": "<username>",
+  "email": "<email>",
+  "password": "<password>",
+  "password2": "<password>"
+}
+```
+
+Response:
+```json
+{
+  "id": <user_id>,
+  "username": "<username>",
+  "email": "<email>",
+  "specialty": "<specialty>"
+}
+```
+
+### User Profile
+**GET** `/api/profile/<user_id>/`
+
+Response:
+```json
+{
+  "id": <user_id>,
+  "username": "<username>",
+  "email": "<email>",
+  "bio": "<bio>",
+  "avatar": "<avatar_url>"
+}
+```
+
+**PUT** `/api/profile/<user_id>/`
+
+Request:
+```json
+{
+  "bio": "<updated_bio>",
+  "avatar": "<updated_avatar_url>"
+}
+```
+
+Response:
+```json
+{
+  "message": "Profile updated successfully."
+}
+```
+
+---
+
+## Thread Management
+
+### Get Threads
+**GET** `/api/threads/`
+
+Response:
+```json
+[
+  {
+    "id": <thread_id>,
+    "creator": <creator_id>,
+    "subject": "<subject>",
+    "content": "<content>",
+    "topic": <topic_id>,
+    "created": "<timestamp>",
+    "updated": "<timestamp>",
+    "reply_count": <reply_count>,
+    "upvotes": <upvotes_count>,
+    "downvotes": <downvotes_count>,
+    "vote_score": <vote_score>
+  }
+]
+```
+
+### Create Thread
+**POST** `/api/threads/create/`
+
+Request:
+```json
+{
+  "subject": "<subject>",
+  "content": "<content>",
+  "topic": <topic_id>
+}
+```
+
+Response:
+```json
+{
+  "id": <thread_id>,
+  "creator": <creator_id>,
+  "subject": "<subject>",
+  "content": "<content>",
+  "topic": <topic_id>,
+  "created": "<timestamp>",
+  "updated": "<timestamp>",
+  "reply_count": 0
+}
+```
+
+### Get Thread by ID
+**GET** `/api/threads/<thread_id>/`
+
+Response:
+```json
+{
+  "id": <thread_id>,
+  "creator": <creator_id>,
+  "subject": "<subject>",
+  "content": "<content>",
+  "topic": <topic_id>,
+  "created": "<timestamp>",
+  "updated": "<timestamp>",
+  "reply_count": <reply_count>
+}
+```
+
+### Top Threads
+**GET** `/api/topThreads/`
+
+Response:
+```json
+[
+  {
+    "id": <thread_id>,
+    "creator": <creator_id>,
+    "subject": "<subject>",
+    "content": "<content>",
+    "topic": <topic_id>,
+    "created": "<timestamp>",
+    "updated": "<timestamp>",
+    "reply_count": <reply_count>
+  }
+]
+```
+
+---
+
+## Post Management
+
+### Get Posts
+**GET** `/api/threads/<thread_id>/posts/`
+
+Response:
+```json
+[
+  {
+    "id": <post_id>,
+    "thread": <thread_id>,
+    "creator": <creator_id>,
+    "content": "<content>",
+    "created": "<timestamp>"
+  }
+]
+```
+
+### Create Post
+**POST** `/api/threads/<thread_id>/posts/`
+
+Request:
+```json
+{
+  "content": "<post_content>"
+}
+```
+
+Response:
+```json
+{
+  "id": <post_id>,
+  "thread": <thread_id>,
+  "creator": <creator_id>,
+  "content": "<content>",
+  "created": "<timestamp>"
+}
+```
+
+---
+
+## Bookmark Management
+
+### Add/Remove Bookmark
+**POST** `/api/bookmark/`
+
+Request:
+```json
+{
+  "thread": <thread_id>
+}
+```
+
+Response (if added):
+```json
+{
+  "message": "Bookmark added."
+}
+```
+
+Response (if removed):
+```json
+{
+  "message": "Bookmark removed."
+}
+```
+
+### Check Bookmark
+**GET** `/api/bookmark/<thread_id>/check/`
+
+Response:
+```json
+{
+  "pinned": true
+}
+```
+
+### Get Bookmarked Threads
+**GET** `/api/bookmarks/<user_id>/`
+
+Response:
+```json
+[
+  {
+    "id": <thread_id>,
+    "creator": <creator_id>,
+    "subject": "<subject>",
+    "content": "<content>",
+    "topic": <topic_id>,
+    "created": "<timestamp>"
+  }
+]
+```
+
+---
+
+## Password Reset
+
+### Request Password Reset
+**POST** `/api/password_reset/`
+
+Request:
+```json
+{
+  "email": "<user_email>"
+}
+```
+
+Response:
+```json
+{
+  "message": "Password reset link sent to your email."
+}
+```
+
+### Confirm Password Reset
+**POST** `/api/password_reset_confirm/`
+
+Request:
+```json
+{
+  "uid": "<uid>",
+  "token": "<token>",
+  "new_password": "<new_password>"
+}
+```
+
+Response:
+```json
+{
+  "message": "Password reset successful."
+}
+```
+
+---
+
+## Voting
+
+### Upvote/Downvote Thread
+**POST** `/api/threads/<thread_id>/<action>/`
+
+Action can be `upvote` or `downvote`.
+
+Response:
+```json
+{
+  "vote_score": <new_vote_score>
+}
+```
+
+---
+
+## Error Codes
+- **400 Bad Request**: Invalid input or missing required fields.
+- **401 Unauthorized**: Authentication is required.
+- **403 Forbidden**: Permission denied.
+- **404 Not Found**: The resource was not found.
