@@ -17,12 +17,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
-    specialty = serializers.CharField(required=False, allow_blank=True)
-    course_year = serializers.IntegerField(required=False, min_value=1, max_value=4)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2', 'specialty', 'course_year')
+        fields = ('username', 'email', 'password', 'password2')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -30,8 +28,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        specialty = validated_data.pop('specialty', '')
-        course_year = validated_data.pop('course_year', 1)
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email']
@@ -39,8 +35,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         profile = user.profile
-        profile.specialty = specialty
-        profile.course_year = course_year
         profile.save()
         return user
 
@@ -91,4 +85,4 @@ class PinSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['name', 'bio', 'avatar', 'status', 'specialty', 'course_year']
+        fields = ['name', 'bio', 'avatar', 'status']

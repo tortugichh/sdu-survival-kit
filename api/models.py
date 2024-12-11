@@ -28,8 +28,6 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, default="Hello world")
     avatar = models.URLField(default=None, blank=True)
     status = models.CharField(max_length=16, blank=True, default='')
-    specialty = models.CharField(max_length=128, default='', verbose_name="Specialty")
-    course_year = models.PositiveSmallIntegerField(default=1, verbose_name="Course Year")
 
     def __str__(self) -> str:
         return f'{self.user} profile'
