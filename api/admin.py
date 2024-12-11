@@ -13,9 +13,9 @@ class UserAdmin(admin.ModelAdmin):
 # Customizing Profile Admin
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'specialty', 'course_year', 'status')
-    search_fields = ('user__username', 'specialty')
-    list_filter = ('course_year', 'status')
+    list_display = ('user', 'status')
+    search_fields = ('user__username', 'user__email')
+    list_filter = ('status',)
 
 
 # Customizing Thread Admin
